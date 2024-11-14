@@ -6,12 +6,12 @@ import lombok.Data;
 /**
 * 建立 users 資料表
 * 	user_id int primary key auto_increment comment '使用者ID',
-	username varchar(50) not null unique comment '使用者名稱',
- password_hash varchar(255) not null comment '使用者Hash密碼',
- salt varchar(255) not null comment '隨機鹽',
- email varchar(255) comment '電子郵件',
- active boolean default false comment '帳號啟動',
- role varchar(50) not null default 'ROLE_USER' comment '角色權限'
+	username varchar(255) not null comment '使用者姓名',
+	phonenumber int not null unique comment '手機',
+ 	password_hash varchar(255) not null comment '使用者Hash密碼',
+ 	salt varchar(255) not null comment '隨機鹽',
+ 	email varchar(255) comment '電子郵件',
+ 	role varchar(255) not null default 'ROLE_USER' comment '角色權限'
 */
 @Data
 public class User {
