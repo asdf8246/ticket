@@ -15,6 +15,7 @@ import lombok.Data;
 */
 @Data
 public class User {
+	
 	private Integer Id; // 使用者ID
 	private String name; // 使用者名稱
 	private Integer phonenumber; //手機
