@@ -1,12 +1,10 @@
 package ticket.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import com.google.protobuf.TextFormatParseInfoTree;
-
+import ticket.exception.PasswordInvalidException;
+import ticket.exception.UserNotFoundException;
 import ticket.model.dto.UserDto;
 import ticket.model.entity.User;
 import ticket.repository.UserDao;
@@ -79,10 +77,10 @@ public class UserService {
 	//修改使用者
 	public void updateUser(String userId, String username, Integer phonenumber, String email, String role) {
 		if (!username.isEmpty()) {
-			userDao.updateUserActive(Integer.parseInt(userId), username);
+			userDao.updateName(Integer.parseInt(userId), username);
 		}
-		if (!active.isEmpty()) {
-			userDao.updateUserActive(Integer.parseInt(userId), Boolean.parseBoolean(active));
+		if (!email.isEmpty()) {
+			userDao.updateEmail(Integer.parseInt(userId), email);
 		}
 		if (!role.isEmpty()) {
 			userDao.updateUserRole(Integer.parseInt(userId), role);
@@ -90,8 +88,8 @@ public class UserService {
 	}
 	
 	//變更密碼
-	public void updatePassword(Integer userId, String username, String oldPassword, String newPassword) throws UserNotFoundException, PasswordInvalidException {
-		User user = userDao.getUser(username);
+	public void updatePassword(Integer userId, Integer phonenumber, String oldPassword, String newPassword) throws UserNotFoundException, PasswordInvalidException {
+		User user = userDao.getUser(phonenumber);
 		if (user==null) {
 			throw new UserNotFoundException();
 		}
