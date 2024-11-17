@@ -59,8 +59,8 @@ public class UserService {
 	}
 	
 	// 取得指定使用者
-	public UserDto getUser(String phonenumber) {
-		User user = userDao.getUser(Integer.parseInt(phonenumber));
+	public UserDto getUser(String userId) {
+		User user = userDao.getUser(Integer.parseInt(userId));
 		if (user==null) {
 			return null;
 		}

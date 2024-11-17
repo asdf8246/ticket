@@ -61,8 +61,8 @@ public class UserServlet extends HttpServlet {
 			resp.sendRedirect("/javaweb/user");
 			return;
 		} else if (pathInfo.equals("/get")) { //  取得 user 資料並導入到修改頁面
-			String username =req.getParameter("username");
-			UserDto userDto = userService.getUser(username);
+			String userId =req.getParameter("userId");
+			UserDto userDto = userService.getUser(userId);
 			// 將必要資料加入到 requset 屬性中以便交由 jsp 進行分析與呈現
 			req.setAttribute("userDto", userDto);
 			// 重導到 user_update.jsp
@@ -108,7 +108,7 @@ public class UserServlet extends HttpServlet {
 		}
 		
 		// 外重導到指定 URL 網頁
-		resp.sendRedirect("/javaweb/user");
+		resp.sendRedirect("/ticket/user");
 	}
 	
 	
