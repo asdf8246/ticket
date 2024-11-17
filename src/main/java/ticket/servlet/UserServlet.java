@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ticket.model.dto.UserCert;
 import ticket.model.dto.UserDto;
 import ticket.service.UserService;
 
@@ -79,24 +80,24 @@ public class UserServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
 		String role = req.getParameter("role");
-		String active = req.getParameter("active");
+		String phonenumber = req.getParameter("phonenumber");
 		String userId = req.getParameter("userId");
 		String oldPassword = req.getParameter("oldPassword");
 		String newPassword = req.getParameter("newPassword");
 		
 		switch (pathInfo) {
 		case "/add": 
-			userService.appendUser(username, password, email, role);
+			userService.appendUser(username, phonenumber, password, email, role);
 			break;
 		case "/update":
-			userService.updateUser(userId, active, role);
+			userService.updateUser(userId, username, phonenumber, email, role);
 			break;
 		case "/update/password":
 			// 修改密碼要在已登入的環境下
 			HttpSession session = req.getSession();
 			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 			try {
-				userService.updatePassword(userCert.getUserId(), userCert.getUsername(), oldPassword, newPassword);
+				userService.updatePassword(userCert.getUserId(), userCert.getUserPhonenumber(), oldPassword, newPassword);
 				req.setAttribute("message", "密碼更新成功");
 				req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
 			} catch (Exception e) {

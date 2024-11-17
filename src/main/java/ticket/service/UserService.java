@@ -75,7 +75,7 @@ public class UserService {
 	}
 	
 	//修改使用者
-	public void updateUser(String userId, String username, Integer phonenumber, String email, String role) {
+	public void updateUser(String userId, String username, String phonenumber, String email, String role) {
 		if (!username.isEmpty()) {
 			userDao.updateName(Integer.parseInt(userId), username);
 		}
