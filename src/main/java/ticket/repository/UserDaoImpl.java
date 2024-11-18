@@ -26,7 +26,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 				User user = new User();
 				user.setId(rs.getInt("user_id"));
 				user.setName(rs.getString("username"));
-				user.setPhonenumber(rs.getInt("phonenumber"));
+				user.setPhonenumber(rs.getString("phonenumber"));
 				user.setPasswordHash(rs.getString("password_hash"));
 				user.setSalt(rs.getString("salt"));
 				user.setEmail(rs.getString("email"));
@@ -42,10 +42,10 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	@Override
-	public User getUser(Integer phonenumber) {
+	public User getUser(String phonenumber) {
 		String sql = "select user_id, username, phonenumber, password_hash, salt, email, role from users where phonenumber=?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, phonenumber);// 第一個 ? 放 phonenumber
+			pstmt.setString(1, phonenumber);// 第一個 ? 放 phonenumber
 			
 			try(ResultSet rs = pstmt.executeQuery()){
 				if (rs.next()) { // 若有得到一筆
@@ -53,7 +53,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 					User user = new User();
 					user.setId(rs.getInt("user_id"));
 					user.setName(rs.getString("username"));
-					user.setPhonenumber(rs.getInt("phonenumber"));
+					user.setPhonenumber(rs.getString("phonenumber"));
 					user.setPasswordHash(rs.getString("password_hash"));
 					user.setSalt(rs.getString("salt"));
 					user.setEmail(rs.getString("email"));
@@ -72,7 +72,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		String sql = "insert into users(username, phonenumber, password_hash, salt, email, role) value(?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getName());
-			pstmt.setInt(2, user.getPhonenumber());
+			pstmt.setString(2, user.getPhonenumber());
 			pstmt.setString(3, user.getPasswordHash());
 			pstmt.setString(4, user.getSalt());
 			pstmt.setString(5, user.getEmail());

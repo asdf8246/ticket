@@ -7,7 +7,7 @@ import lombok.Data;
 * 建立 users 資料表
 * 	user_id int primary key auto_increment comment '使用者ID',
 	username varchar(255) not null comment '使用者姓名',
-	phonenumber int not null unique comment '手機',
+	phonenumber varchar(255) not null unique comment '手機',
  	password_hash varchar(255) not null comment '使用者Hash密碼',
  	salt varchar(255) not null comment '隨機鹽',
  	email varchar(255) comment '電子郵件',
@@ -17,7 +17,7 @@ import lombok.Data;
 public class User {
 	private Integer Id; // 使用者ID
 	private String name; // 使用者名稱
-	private Integer phonenumber; //手機
+	private String phonenumber; //手機
 	private String passwordHash; // 使用者Hash密碼
 	private String salt; // 隨機鹽
 	private String email; // 電子郵件

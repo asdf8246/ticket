@@ -58,11 +58,11 @@ public class UserServlet extends HttpServlet {
 			String userId = req.getParameter("userId");
 			userService.deleteUser(userId);
 			// 刪除完畢後，重新執行首頁
-			resp.sendRedirect("/javaweb/user");
+			resp.sendRedirect("/ticket/user");
 			return;
 		} else if (pathInfo.equals("/get")) { //  取得 user 資料並導入到修改頁面
-			String userId =req.getParameter("userId");
-			UserDto userDto = userService.getUser(userId);
+			String userPhonenumber =req.getParameter("userPhonenumber");
+			UserDto userDto = userService.getUser(userPhonenumber);
 			// 將必要資料加入到 requset 屬性中以便交由 jsp 進行分析與呈現
 			req.setAttribute("userDto", userDto);
 			// 重導到 user_update.jsp

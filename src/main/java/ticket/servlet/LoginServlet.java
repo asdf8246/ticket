@@ -25,14 +25,14 @@ public class LoginServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String username = req.getParameter("username");
+		String phonenumber = req.getParameter("phonenumber");
 		String password = req.getParameter("password");
 		
 		//驗證帳密取得憑證
 		UserCert userCert = null;
 		
 		try {
-			userCert = certService.gerCert(username, password);
+			userCert = certService.gerCert(phonenumber, password);
 		} catch (CertException e) {
 			// 將錯誤丟給(重導) error.jsp
 			req.setAttribute("message", e.getMessage());

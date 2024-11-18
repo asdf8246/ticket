@@ -19,7 +19,7 @@
 			<form class="pure-form" method="post" action="/ticket/user/update">
 				<fieldset>
 					<legend>User 修改</legend>
-					序號: <input type="text" name="userId" value="${ userDto.UserId }" readonly /><p />
+					序號: <input type="text" name="userId" value="${ userDto.userId }" readonly /><p />
 					帳號: <input type="text" name="username" value="${ userDto.username }" required /><p />
 					手機: <input type="tel" name="phonenumber" value="${ userDto.userPhonenumber }" readonly><p />
 					電郵: <input type="email" name="email" value="${ userDto.userEmail }" required /><p />

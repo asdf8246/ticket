@@ -20,6 +20,7 @@
 			<form class="pure-form" method="post" action="/ticket/user/add">
 				<fieldset>
 					<legend>User 新增</legend>
+					姓名: <input type="text" name="username" placeholder="請輸入姓名" required /><p />
 					手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" required><p /> 
 					密碼: <input type="text" name="password" placeholder="請輸入 password" required /><p /> 
 					電郵: <input type="email" name="email" placeholder="請輸入 email" required /><p />
@@ -49,7 +50,7 @@
 								<td>${ userDto.userPhonenumber }</td>
 								<td>${ userDto.userEmail }</td>
 								<td>${ userDto.userRole }</td>
-								<td><a href="/ticket/user/get?userId=${ userDto.userId }" class="button-secondary pure-button">修改</a></td>
+								<td><a href="/ticket/user/get?userPhonenumber=${ userDto.userPhonenumber }" class="button-secondary pure-button">修改</a></td>
 								<td><a href="/ticket/user/delete?userId=${ userDto.userId }" class="button-error pure-button">刪除</a></td>
 							</tr>
 						</c:forEach>

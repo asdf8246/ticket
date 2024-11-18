@@ -1,7 +1,8 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <div class="pure-menu pure-menu-horizontal" style="height: 50px; align-content: center;">
 	<!-- menu bar -->
-	<a href="/ticket/users" class="pure-menu-heading pure-menu-link">使用者維護檔</a>
+	<a href="/ticket/index.html" class="pure-menu-heading pure-menu-link">首頁</a>
+	<a href="/ticket/user" class="pure-menu-heading pure-menu-link">使用者維護檔</a>
 	<a href="/ticket/login" class="pure-menu-heading pure-menu-link">登入</a>
 	<a href="/ticket/user/update/password" class="pure-menu-heading pure-menu-link">修改密碼</a>
 	<a href="/ticket/products" class="pure-menu-heading pure-menu-link">商品維護檔</a>

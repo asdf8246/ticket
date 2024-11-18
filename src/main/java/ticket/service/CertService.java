@@ -16,7 +16,7 @@ public class CertService {
 	//登入成功後可以取得憑證
 	public UserCert gerCert(String phonenumber,String password) throws CertException {
 		// 1.是否有此人
-		User user = userDao.getUser(Integer.parseInt(phonenumber));
+		User user = userDao.getUser(phonenumber);
 		if (user == null) {
 			throw new UserNotFoundException();
 		}

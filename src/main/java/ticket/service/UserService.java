@@ -44,7 +44,7 @@ public class UserService {
 		// 根據上列參數封裝到 User 物件中
 		User user = new User();
 		user.setName(username);
-		user.setPhonenumber(Integer.parseInt(phonenumber));
+		user.setPhonenumber(phonenumber);
 		user.setPasswordHash(passwordHash);
 		user.setSalt(salt);
 		user.setEmail(email);
@@ -59,8 +59,8 @@ public class UserService {
 	}
 	
 	// 取得指定使用者
-	public UserDto getUser(String userId) {
-		User user = userDao.getUser(Integer.parseInt(userId));
+	public UserDto getUser(String phonenumber) {
+		User user = userDao.getUser(phonenumber);
 		if (user==null) {
 			return null;
 		}
@@ -88,7 +88,7 @@ public class UserService {
 	}
 	
 	//變更密碼
-	public void updatePassword(Integer userId, Integer phonenumber, String oldPassword, String newPassword) throws UserNotFoundException, PasswordInvalidException {
+	public void updatePassword(Integer userId, String phonenumber, String oldPassword, String newPassword) throws UserNotFoundException, PasswordInvalidException {
 		User user = userDao.getUser(phonenumber);
 		if (user==null) {
 			throw new UserNotFoundException();
