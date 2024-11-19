@@ -30,13 +30,31 @@ public class EventServlet extends HttpServlet {
 			List<EventDto> eventDtos = eventService.findAllEvents();
 			req.setAttribute("eventDtos", eventDtos);
 			req.getRequestDispatcher("/WEB-INF/view/events.jsp").forward(req, resp);
+			return;
+		}
+		if (pathInfo.equals("/add")) {
+			req.getRequestDispatcher("/WEB-INF/view/event_add.jsp").forward(req, resp);
+			return;
 		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		String pathInfo = req.getPathInfo();
+		String eventId = req.getParameter("eventId");
+		String eventName = req.getParameter("eventName");
+		String eventDate = req.getParameter("eventDate");
+		String venue = req.getParameter("venue");
+		String description = req.getParameter("description");
+		
+		switch (pathInfo) {
+		case "/add" :
+			eventService.appendEvent(eventName, eventDate, venue, description);
+			break;
+			
+		}
+		
+		resp.sendRedirect("/ticket/index.html");
 	}
 	
 	

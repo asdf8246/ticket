@@ -1,6 +1,5 @@
 package ticket.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import ticket.repository.EventDaoImpl;
 
 public class EventService {
 	private EventDao eventDao = new EventDaoImpl();
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	// 所有
 	public List<EventDto> findAllEvents() {
 		
@@ -21,7 +20,7 @@ public class EventService {
 			EventDto eventDto = new EventDto();
 			eventDto.setEventId(event.getEventId());
 			eventDto.setEventName(event.getEventName());
-			eventDto.setEventDate(sdf.format(event.getEventDate()));
+			eventDto.setEventDate(event.getEventDate());
 			eventDto.setVenue(event.getVenue());
 			eventDto.setDescription(event.getDescription());
 			
@@ -55,7 +54,7 @@ public class EventService {
 		EventDto eventDto = new EventDto();
 		eventDto.setEventId(event.getEventId());
 		eventDto.setEventName(event.getEventName());
-		eventDto.setEventDate(sdf.format(event.getEventDate()));
+		eventDto.setEventDate(event.getEventDate());
 		eventDto.setVenue(event.getVenue());
 		eventDto.setDescription(event.getDescription());
 		

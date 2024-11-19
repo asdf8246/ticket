@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<!-- menu bar include -->
-		<%@include file="/WEB-INF/view/menu.jspf" %>
+		<%@include file="/WEB-INF/view/event_menu.jspf" %>
 		
 		<div class="pure-form" style="padding: 15px;">
 				<fieldset>
