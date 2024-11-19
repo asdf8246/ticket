@@ -72,7 +72,7 @@ public class EventService {
 		if (!venue.isEmpty()) {
 			eventDao.updateVenue(Integer.parseInt(eventId), venue);
 		}
-		if (!eventName.isEmpty()) {
+		if (!description.isEmpty()) {
 			eventDao.updateDescription(Integer.parseInt(eventId), description);
 		}
 	}

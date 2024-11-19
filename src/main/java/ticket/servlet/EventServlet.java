@@ -36,6 +36,13 @@ public class EventServlet extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/view/event_add.jsp").forward(req, resp);
 			return;
 		}
+		if (pathInfo.equals("/get")) {
+			String eventId = req.getParameter("eventId");
+			EventDto eventDto = eventService.getEvent(eventId);
+			req.setAttribute("eventDto", eventDto);
+			req.getRequestDispatcher("/WEB-INF/view/event_update.jsp").forward(req, resp);
+			return;
+		}
 	}
 
 	@Override
@@ -50,11 +57,13 @@ public class EventServlet extends HttpServlet {
 		switch (pathInfo) {
 		case "/add" :
 			eventService.appendEvent(eventName, eventDate, venue, description);
+			resp.sendRedirect("/ticket/index.html");
 			break;
-			
+		case "/update":
+			eventService.updateEvent(eventId, eventName, eventDate, venue, description);
+			resp.sendRedirect("/ticket/event");
+			break;
 		}
-		
-		resp.sendRedirect("/ticket/index.html");
 	}
 	
 	

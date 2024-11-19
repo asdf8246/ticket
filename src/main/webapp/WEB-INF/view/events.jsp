@@ -29,12 +29,12 @@
 						<c:forEach var="eventDto" items="${ eventDtos }">
 							<tr>
 								<td>${ eventDto.eventId }</td>
-								<td>${ eventDto.eventName}</td>
+								<td>${ eventDto.eventName }</td>
 								<td>${ eventDto.eventDate }</td>
 								<td>${ eventDto.venue }</td>
 								<td>${ eventDto.description }</td>
-								<td><a href="/ticket/user/get?eventId=${ eventDto.eventId }" class="button-secondary pure-button">修改</a></td>
-								<td><a href="/ticket/user/delete?userId=${ eventDto.eventId }" class="button-error pure-button">刪除</a></td>
+								<td><a href="/ticket/event/get?eventId=${ eventDto.eventId }" class="button-secondary pure-button">修改</a></td>
+								<td><a href="/ticket/event/delete?eventId=${ eventDto.eventId }" class="button-error pure-button">刪除</a></td>
 							</tr>
 						</c:forEach>
 					</table>
