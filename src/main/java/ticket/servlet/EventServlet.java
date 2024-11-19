@@ -19,7 +19,7 @@ import ticket.service.EventService;
  刪除單筆: GET /event/delete?eventId=1 
  */
 
-@WebServlet(urlPatterns = {"/event/*","events" })
+@WebServlet(urlPatterns = {"/event/*"})
 public class EventServlet extends HttpServlet {
 	private EventService eventService = new EventService();
 	

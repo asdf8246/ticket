@@ -16,7 +16,7 @@
 		<!-- menu bar include -->
 		<%@include file="/WEB-INF/view/menu.jspf" %>
 		
-		<div class="pure-form">
+		<div class="pure-form" style="padding: 15px;">
 				<fieldset>
 					<legend>Event 列表</legend>
 					<table class="pure-table pure-table-bordered">
