@@ -1,5 +1,7 @@
 package ticket.model.entity;
 
+import lombok.Data;
+
 /**
 CREATE TABLE events (
     event_id INT AUTO_INCREMENT PRIMARY KEY comment '活動ID',
@@ -10,7 +12,7 @@ CREATE TABLE events (
 );
  */
 
-
+@Data
 public class Events {
 	private Integer eventId;
 	private String eventName;

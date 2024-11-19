@@ -1,5 +1,6 @@
 package ticket.model.entity;
 
+import lombok.Data;
 
 /**
  CREATE TABLE seats (
@@ -13,6 +14,7 @@ package ticket.model.entity;
 );
  */
 
+@Data
 public class Seats {
 	private Integer seatId;
 	private Integer eventId;
