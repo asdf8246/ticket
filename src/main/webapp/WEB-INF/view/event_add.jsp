@@ -28,7 +28,7 @@
 					活動名稱: <input type="text" name="eventName" placeholder="請輸入活動名稱" required /><p />
 					<label for="datetime">活動日期: </label><input type="text" id="datetime" name="eventDate" required /><p /> 
 					活動地點: <input type="text" name="venue" placeholder="請輸入活動地點" required /><p /> 
-					活動簡介: <textarea rows="5" cols="20" name="description"></textarea><p /> 
+					活動簡介: <textarea rows="5" cols="22" name="description"></textarea><p /> 
 					<button type="reset" class="button-warning pure-button">Reset</button>
 					<button type="submit" class="button-success pure-button">Submit</button>	  
 				</fieldset>
