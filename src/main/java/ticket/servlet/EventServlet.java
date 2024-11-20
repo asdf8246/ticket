@@ -43,6 +43,12 @@ public class EventServlet extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/view/event_update.jsp").forward(req, resp);
 			return;
 		}
+		if (pathInfo.equals("/delete")) {
+			String eventId = req.getParameter("eventId");
+			eventService.deleteEvent(eventId);
+			resp.sendRedirect("/ticket/event");
+			return;
+		}
 	}
 
 	@Override

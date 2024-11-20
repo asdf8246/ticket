@@ -6,10 +6,10 @@ import ticket.model.entity.Events;
 
 public interface EventDao {
 	
-	// 多筆:查詢所有使用者
+	// 多筆:查詢所有
 	List<Events> findAllEvents();
 	
-	// 查詢該筆使用者
+	// 查詢該筆
 	Events getEvent(Integer eventId);
 	
 	// 新增
