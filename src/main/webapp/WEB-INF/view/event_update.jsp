@@ -35,7 +35,15 @@
 					</fieldset>
 				</div>
 				<div>
-				
+					<fieldset>
+						<table>
+							<thead>
+							</thead>
+							<c:forEach var="seatCategoriesDto" items="${ seatCategoriesDtos }">
+							
+							</c:forEach>
+						</table>
+					</fieldset>
 				</div>
 			</form>
 		</div>
