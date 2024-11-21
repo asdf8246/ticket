@@ -13,7 +13,7 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 
 	@Override
 	public List<Events> findAllEvents() {
-		List<Events> events = new ArrayList<Events>();
+		List<Events> events = new ArrayList<>();
 		String sql = "select event_id, event_name, event_date, venue, description from events";
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)) {
@@ -60,9 +60,9 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	}
 
 	@Override
-	public void addEvent(Events event) {
+	public Integer addEvent(Events event) {
 		String sql = "insert into events(event_name, event_date, venue, description) value(?, ?, ?, ?)";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, event.getEventName());
 			pstmt.setString(2, event.getEventDate());
 			pstmt.setString(3, event.getVenue());
@@ -72,9 +72,17 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 			if (rowcount != 1) {
 				throw new RuntimeException("新增失敗");
 			}
+			
+			try(ResultSet rs = pstmt.getGeneratedKeys()){
+				if (rs.next()) {
+					Integer eventId = rs.getInt(1);
+					return eventId;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override

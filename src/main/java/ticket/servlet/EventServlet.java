@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ticket.model.dto.EventDto;
+import ticket.model.dto.SeatCategoriesDto;
 import ticket.service.EventService;
+import ticket.service.SeatCategoriesService;
 
 /**
  查詢所有: GET /events
@@ -22,6 +24,7 @@ import ticket.service.EventService;
 @WebServlet(urlPatterns = {"/event/*"})
 public class EventServlet extends HttpServlet {
 	private EventService eventService = new EventService();
+	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,7 +42,9 @@ public class EventServlet extends HttpServlet {
 		if (pathInfo.equals("/get")) {
 			String eventId = req.getParameter("eventId");
 			EventDto eventDto = eventService.getEvent(eventId);
+			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
 			req.setAttribute("eventDto", eventDto);
+			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
 			req.getRequestDispatcher("/WEB-INF/view/event_update.jsp").forward(req, resp);
 			return;
 		}
@@ -60,10 +65,15 @@ public class EventServlet extends HttpServlet {
 		String venue = req.getParameter("venue");
 		String description = req.getParameter("description");
 		
+		String[] categoryNames = req.getParameterValues("categoryName");
+		String[] seatPrices = req.getParameterValues("seatPrice"); 
+		String[] numSeatss = req.getParameterValues("numSeats"); 
+		
 		switch (pathInfo) {
 		case "/add" :
-			eventService.appendEvent(eventName, eventDate, venue, description);
-			resp.sendRedirect("/ticket/index.html");
+			Integer seatEventId = eventService.appendEvent(eventName, eventDate, venue, description);
+			seatCategoriesService.appendSeatCategory(seatEventId, categoryNames, seatPrices, numSeatss);
+			resp.sendRedirect("/ticket/event");
 			break;
 		case "/update":
 			eventService.updateEvent(eventId, eventName, eventDate, venue, description);

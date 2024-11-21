@@ -3,6 +3,8 @@ package ticket.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.tags.shaded.org.apache.regexp.recompile;
+
 import ticket.model.dto.EventDto;
 import ticket.model.entity.Events;
 import ticket.repository.EventDao;
@@ -30,13 +32,14 @@ public class EventService {
 	}
 	
 	//新增
-	public void appendEvent(String eventName, String eventDate, String venue, String description) {
+	public Integer appendEvent(String eventName, String eventDate, String venue, String description) {
 		Events event = new Events();
 		event.setEventName(eventName);
 		event.setEventDate(eventDate);
 		event.setVenue(venue);
 		event.setDescription(description);
-		eventDao.addEvent(event);
+		Integer eventId  = eventDao.addEvent(event);
+		return eventId;
 	}
 	
 	// 刪除

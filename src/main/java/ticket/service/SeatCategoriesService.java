@@ -1,5 +1,8 @@
 package ticket.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ticket.model.dto.SeatCategoriesDto;
 import ticket.model.entity.SeatCategories;
 import ticket.repository.SeatCategoriesDao;
@@ -9,13 +12,24 @@ public class SeatCategoriesService {
 	private SeatCategoriesDao seatCategoriesDao = new SeatCategoriesDaoImpl();
 	
 	//新增
-	public void appendSeatCategory(String eventId, String categoryName, String seatPrice, String numSeats) {
-		SeatCategories seatCategory = new SeatCategories();
-		seatCategory.setEventId(Integer.parseInt(eventId));
-		seatCategory.setCategoryName(categoryName);
-		seatCategory.setSeatPrice(Integer.parseInt(seatPrice));
-		seatCategory.setNumSeats(Integer.parseInt(numSeats));
-		seatCategoriesDao.addSeatCategories(seatCategory);
+	public void appendSeatCategory(Integer eventId, String[] categoryNames, String[] seatPrices, String[] numSeatss) {
+		List<SeatCategories> seatCategories = new ArrayList<>();
+		
+		for(int i=0;i<categoryNames.length;i++) {
+			String categoryName = categoryNames[i];
+			Integer seatPrice = Integer.parseInt(seatPrices[i]);
+			Integer numSeats = Integer.parseInt(numSeatss[i]);
+			
+			SeatCategories seatCategory = new SeatCategories();
+			seatCategory.setEventId(eventId);
+			seatCategory.setCategoryName(categoryName);
+			seatCategory.setSeatPrice(seatPrice);
+			seatCategory.setNumSeats(numSeats);
+			
+			seatCategories.add(seatCategory);
+		}
+		
+		seatCategoriesDao.addSeatCategories(seatCategories);
 	}
 		
 	// 刪除
@@ -23,20 +37,22 @@ public class SeatCategoriesService {
 		seatCategoriesDao.deleteSeatCategories(Integer.parseInt(eventId));
 	}
 		
-	// 取得
-	public SeatCategoriesDto getSeatCategories(String eventId) {
-		SeatCategories seatCategory = seatCategoriesDao.getSeatCategories(Integer.parseInt(eventId));
-		if (seatCategory == null) {
-			return null;
-		}
-		SeatCategoriesDto seatCategoriesDto = new SeatCategoriesDto();
-		seatCategoriesDto.setSeatCategoryId(seatCategory.getSeatCategoryId());
-		seatCategoriesDto.setEventId(seatCategory.getEventId());
-		seatCategoriesDto.setCategoryName(seatCategory.getCategoryName());
-		seatCategoriesDto.setSeatPrice(seatCategory.getSeatPrice());
-		seatCategoriesDto.setNumSeats(seatCategory.getNumSeats());
+	// 取得該活動所有
+	public List<SeatCategoriesDto> getSeatCategories(String eventId) {
+		List<SeatCategoriesDto> seatCategoriesDtos = new ArrayList<>();
+		List<SeatCategories> seatCategories = seatCategoriesDao.getSeatCategories(Integer.parseInt(eventId));
 		
-		return seatCategoriesDto;
+		for(SeatCategories seatCategory : seatCategories) {
+			SeatCategoriesDto seatCategoriesDto = new SeatCategoriesDto();
+			seatCategoriesDto.setSeatCategoryId(seatCategory.getSeatCategoryId());
+			seatCategoriesDto.setEventId(seatCategory.getEventId());
+			seatCategoriesDto.setCategoryName(seatCategory.getCategoryName());
+			seatCategoriesDto.setSeatPrice(seatCategory.getSeatPrice());
+			seatCategoriesDto.setNumSeats(seatCategory.getNumSeats());
+			
+			seatCategoriesDtos.add(seatCategoriesDto);
+		}
+		return seatCategoriesDtos;
 	}
 	
 	//修改

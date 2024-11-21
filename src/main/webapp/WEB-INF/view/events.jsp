@@ -22,13 +22,12 @@
 					<table class="pure-table pure-table-bordered">
 						<thead>
 							<tr>
-								<th>活動ID</th><th>活動名稱</th><th>活動日期</th><th>活動地點</th><th>活動簡介</th>
+								<th>活動名稱</th><th>活動日期</th><th>活動地點</th><th>活動簡介</th>
 								<th>修改</th><th>刪除</th>
 							</tr>
 						</thead>
 						<c:forEach var="eventDto" items="${ eventDtos }">
 							<tr>
-								<td>${ eventDto.eventId }</td>
 								<td>${ eventDto.eventName }</td>
 								<td>${ eventDto.eventDate }</td>
 								<td>${ eventDto.venue }</td>

@@ -13,7 +13,7 @@ public interface EventDao {
 	Events getEvent(Integer eventId);
 	
 	// 新增
-	void addEvent(Events events);
+	Integer addEvent(Events events);
 	
 	// 修改
 	void updateEventName(Integer eventId, String eventName);

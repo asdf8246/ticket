@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="ticket.model.dto.EventDto" %>
+<%@page import="ticket.model.dto.SeatCategoriesDto" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %> <!-- 核心庫 -->
 
 <!DOCTYPE html>
@@ -22,15 +23,20 @@
 	
 		<div style="padding: 15px;">
 			<form class="pure-form" method="post" action="/ticket/event/update">
-				<fieldset>
-					<legend>Event 修改</legend>
-					活動名稱: <input type="text" name="eventName" value="${ eventDto.eventName }" required /><p />
-					<label for="datetime">活動日期: </label><input type="text" id="datetime" name="eventDate" value="${ eventDto.eventDate }" required /><p /> 
-					活動地點: <input type="text" name="venue" value="${ eventDto.venue }" required /><p /> 
-					活動簡介: <textarea rows="5" cols="22" name="description"></textarea><p />
-					<input type="hidden" name="eventId" value="${ eventDto.eventId }">
-					<button type="submit" class="button-secondary pure-button" >Update</button>
-				</fieldset>
+				<div>
+					<fieldset>
+						<legend>Event 修改</legend>
+						活動名稱: <input type="text" name="eventName" value="${ eventDto.eventName }" required /><p />
+						<label for="datetime">活動日期: </label><input type="text" id="datetime" name="eventDate" value="${ eventDto.eventDate }" required /><p /> 
+						活動地點: <input type="text" name="venue" value="${ eventDto.venue }" required /><p /> 
+						活動簡介: <textarea rows="5" cols="22" name="description"></textarea><p />
+						<input type="hidden" name="eventId" value="${ eventDto.eventId }">
+						<button type="submit" class="button-secondary pure-button" >Update</button>
+					</fieldset>
+				</div>
+				<div>
+				
+				</div>
 			</form>
 		</div>
 		
