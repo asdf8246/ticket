@@ -7,6 +7,6 @@ public class SeatCategoriesDto {
 	private Integer seatCategoryId;
 	private Integer eventId;
 	private String categoryName;
-	private Double price;
+	private Integer seatPrice;
 	private Integer numSeats;
 }
