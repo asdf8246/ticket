@@ -38,9 +38,16 @@
 					<fieldset>
 						<table>
 							<thead>
+								<tr>
+									<th>座位等級</th><th>座位價額</th><th>座位數量</th>
+								</tr>
 							</thead>
-							<c:forEach var="seatCategoriesDto" items="${ seatCategoriesDtos }">
-							
+							<c:forEach var="seatCategoriesDto" items="${ seatCategoriesDto }">
+								<tr>
+									<td><input type="text" name="categoryName" value="${ seatCategoriesDto.categoryName }" required></td>
+									<td><input type="number" name="seatPrice" style="width: 75px" min="0" value="${ seatCategoriesDto.seatPrice }" required></td>
+									<td><input type="number" name="numSeats" style="width: 75px" min="1" value="${ seatCategoriesDto.numSeats }" required></td>
+								</tr>
 							</c:forEach>
 						</table>
 					</fieldset>
