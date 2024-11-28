@@ -33,8 +33,8 @@ public class SeatCategoriesService {
 	}
 		
 	// 刪除
-	public void deleteEvent(String eventId) {
-		seatCategoriesDao.deleteSeatCategories(Integer.parseInt(eventId));
+	public void deleteSeatCategorie(String seatCategoryId) {
+		seatCategoriesDao.deleteSeatCategories(Integer.parseInt(seatCategoryId));
 	}
 		
 	// 取得該活動所有

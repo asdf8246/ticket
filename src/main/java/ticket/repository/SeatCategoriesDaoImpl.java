@@ -106,15 +106,15 @@ public class SeatCategoriesDaoImpl extends BaseDao implements SeatCategoriesDao{
 	}
 
 	@Override
-	public void deleteSeatCategories(Integer eventId) {
-		String sql = "delete from seat_categories where event_id = ?";
+	public void deleteSeatCategories(Integer seatCategoryId) {
+		String sql = "delete from seat_categories where seat_category_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			
-			pstmt.setInt(1, eventId);
+			pstmt.setInt(1, seatCategoryId);
 			
 			int rowcount = pstmt.executeUpdate();
 			if (rowcount != 1) {
-				throw new RuntimeException("刪除失敗 Id:" + eventId);
+				throw new RuntimeException("刪除失敗 Id:" + seatCategoryId);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

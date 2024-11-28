@@ -54,6 +54,10 @@ public class EventServlet extends HttpServlet {
 			resp.sendRedirect("/ticket/event");
 			return;
 		}
+		if (pathInfo.equals("/buy")) {
+			String eventId = req.getParameter("eventId");
+			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
+		}
 	}
 
 	@Override

@@ -21,7 +21,6 @@
 	        }
 	        .form-group {
 	            position: relative; /* 使刪除按鈕能相對定位 */
-	            margin-bottom: 10px;
 	        }
 	        .form-group input {
 	            box-sizing: border-box; /* 讓寬度包含內邊距和邊框 */

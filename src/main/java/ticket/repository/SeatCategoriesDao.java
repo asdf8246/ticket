@@ -20,5 +20,5 @@ public interface SeatCategoriesDao {
 	void updateNumSeats(Integer seatCategoryId, Integer numSeats);
 	
 	// 刪除
-	void deleteSeatCategories(Integer eventId);
+	void deleteSeatCategories(Integer seatCategoryId);
 }
