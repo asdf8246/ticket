@@ -32,6 +32,7 @@
 				</div>
 				<p />
 				<h2>座位設定</h2>
+				<button onclick="addSeat()" class="button-secondary pure-button">新增欄位</button><p />
 				<div>
 					<fieldset>
 						<table id="seat-table">
@@ -54,7 +55,6 @@
 						</table>
 					</fieldset>
 				</div>
-				<button onclick="addSeat()" class="button-secondary pure-button">新增欄位</button><p />
 				<button type="reset" class="button-warning pure-button">Reset</button>
 				<button type="submit" class="button-success pure-button">Submit</button>
 			</form>

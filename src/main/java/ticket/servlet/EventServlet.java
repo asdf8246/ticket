@@ -69,6 +69,7 @@ public class EventServlet extends HttpServlet {
 		String venue = req.getParameter("venue");
 		String description = req.getParameter("description");
 		
+		String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
 		String[] categoryNames = req.getParameterValues("categoryName");
 		String[] seatPrices = req.getParameterValues("seatPrice"); 
 		String[] numSeatss = req.getParameterValues("numSeats"); 
@@ -81,6 +82,7 @@ public class EventServlet extends HttpServlet {
 			break;
 		case "/update":
 			eventService.updateEvent(eventId, eventName, eventDate, venue, description);
+			seatCategoriesService.updateSeatCategory(eventId, seatCategoryIds, categoryNames, seatPrices, numSeatss);
 			resp.sendRedirect("/ticket/event");
 			break;
 		}

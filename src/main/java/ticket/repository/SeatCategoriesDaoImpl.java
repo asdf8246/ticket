@@ -120,5 +120,23 @@ public class SeatCategoriesDaoImpl extends BaseDao implements SeatCategoriesDao{
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void updateSeatCategory(Integer seatCategoryId, String categoryName, Integer seatPrice, Integer numSeats) {
+		String sql = "update seat_categories set category_name=?, seat_price=?, num_seats=? where seat_category_id=?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, categoryName);
+			pstmt.setInt(2, seatPrice);
+			pstmt.setInt(3, numSeats);
+			pstmt.setInt(4, seatCategoryId);
+			
+			int rowcount = pstmt.executeUpdate();
+			if (rowcount != 1) {
+				throw new RuntimeException("修改失敗 Id:" + seatCategoryId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

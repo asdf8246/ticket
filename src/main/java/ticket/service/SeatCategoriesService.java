@@ -56,15 +56,26 @@ public class SeatCategoriesService {
 	}
 	
 	//修改
-	public void updateSeatCategory(String seatCategoryId, String categoryName, String seatPrice, String numSeats) {
-		if (!categoryName.isEmpty()) {
-			seatCategoriesDao.updateCategoryName(Integer.parseInt(seatCategoryId), categoryName);
+	public void updateSeatCategory(String eventId, String[] seatCategoryIds, String[] categoryNames, String[] seatPrices, String[] numSeatss) {
+		List<SeatCategories> seatCategories = new ArrayList<>();
+		
+		for(int i=0;i<seatCategoryIds.length;i++) {
+			Integer seatCategoryId = Integer.parseInt(seatCategoryIds[i]);
+			String categoryName = categoryNames[i];
+			Integer seatPrice = Integer.parseInt(seatPrices[i]);
+			Integer numSeats = Integer.parseInt(numSeatss[i]);
+			if (seatCategoryId != 0) {
+				seatCategoriesDao.updateSeatCategory(seatCategoryId, categoryName, seatPrice, numSeats);
+				continue;
+			}
+			SeatCategories seatCategory = new SeatCategories();
+			seatCategory.setEventId(Integer.parseInt(eventId));
+			seatCategory.setCategoryName(categoryName);
+			seatCategory.setSeatPrice(seatPrice);
+			seatCategory.setNumSeats(numSeats);
+			
+			seatCategories.add(seatCategory);
 		}
-		if (!seatPrice.isEmpty()) {
-			seatCategoriesDao.updateSeatPrice(Integer.parseInt(seatCategoryId), Integer.parseInt(seatPrice));
-		}
-		if (!numSeats.isEmpty()) {
-			seatCategoriesDao.updateNumSeats(Integer.parseInt(seatCategoryId), Integer.parseInt(numSeats));
-		}
+		seatCategoriesDao.addSeatCategories(seatCategories);
 	}
 }
