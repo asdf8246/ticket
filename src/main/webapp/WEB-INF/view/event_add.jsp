@@ -14,28 +14,6 @@
     	<!-- 引入 flatpickr 脚本 -->
     	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     	
-    	<style>
-	         fieldset {
-            margin-bottom: 10px;
-            padding: 10px;
-	        }
-	        .form-group {
-	            position: relative; /* 使刪除按鈕能相對定位 */
-	        }
-	        .form-group input {
-	            box-sizing: border-box; /* 讓寬度包含內邊距和邊框 */
-	            margin: 10px;
-	        }
-	        .delete-btn {
-	            cursor: pointer;
-	            position: absolute; /* 絕對定位 */
-	            top: 50%;
-	            transform: translateY(-50%); /* 垂直居中 */
-	        }
-	        #form-container {
-	            margin-top: 20px;
-	        }
-    	</style>
 	</head>
 	<body>
 		<!-- menu bar include -->
@@ -54,13 +32,26 @@
 				</div>
 				<p />
 				<h2>座位設定</h2>
-				<div id="form-container">
+				<div>
 					<fieldset>
-						<div class="form-group">
-							座位等級: <input type="text" name="categoryName" placeholder="請輸入座位分級/區" required>
-							座位價額: <input type="number" name="seatPrice" style="width: 75px" min="0" required>
-							座位數量: <input type="number" name="numSeats" style="width: 75px" min="1" required>
-						</div>
+						<table id="seat-table">
+    						<thead>
+        						<tr>
+						           <th>座位等級</th>
+						           <th>座位價額</th>
+						           <th>座位數量</th>
+						           <th></th>
+        						</tr>
+   							 </thead>
+    						 <tbody>
+       							 <tr>
+						            <td><input type="text" name="categoryName" style="width: 175px" placeholder="請輸入座位分級/區" required></td>
+						            <td><input type="number" name="seatPrice" style="width: 75px" min="0" required></td>
+						            <td><input type="number" name="numSeats" style="width: 75px" min="1" required></td>
+						            <td></td>
+        						</tr>
+    						</tbody>
+						</table>
 					</fieldset>
 				</div>
 				<button onclick="addSeat()" class="button-secondary pure-button">新增欄位</button><p />
@@ -78,35 +69,38 @@
    			
    			
    			function addSeat() {
-   	            // 取得原始表單
-   	            const formContainer = document.getElementById('form-container');
-   	            
-   	            // 複製一份現有的表單
-   	            const newForm = formContainer.querySelector('fieldset').cloneNode(true);
+   			    // 取得表格中的 <tbody> 參照
+   			    const tableBody = document.querySelector('#seat-table tbody');
+   			    
+   			    // 複製表格中的最後一行
+   			    const lastRow = tableBody.rows[tableBody.rows.length - 1];
+   			    const newRow = lastRow.cloneNode(true);  // 複製最後一行
 
-   	            // 為新表單添加刪除按鈕
-   	            const formGroups = newForm.querySelector('.form-group');
-   	            
-   	            const deleteButton = document.createElement('button');
-   	            deleteButton.textContent = '刪除';
-   	            deleteButton.classList.add('delete-btn');
-   	        	deleteButton.classList.add('button-error', 'pure-button');
-   	            deleteButton.onclick = function () {
-   	                if (confirm('確定刪除此組座位設定？')) {
-   	                	formContainer.removeChild(newForm);
-   	                }
-   	            };
+   			    // 清空新複製行中的輸入框內容（這步可選）
+   			    const inputs = newRow.querySelectorAll('input');
+   			    inputs.forEach(input => input.value = '');
+   			    
+   				// 清空新複製行中的第4個 <td> 內容（完全清除所有內部元素）
+   			    const thirdTd = newRow.cells[3]; // 取得第4個 <td>（即第3個索引）
+   			    thirdTd.innerHTML = '';  // 清空第4個 <td> 內的所有內容（包括 <input> 和 <button>）
 
-   	            // 把刪除按鈕加到每個 form-group 的右側
-   	            formGroups.appendChild(deleteButton);
+   			    // 創建刪除按鈕並加到新的行
+   			    const deleteButton = document.createElement('button');
+   			    deleteButton.textContent = '刪除';
+   			    deleteButton.classList.add('delete-btn');
+   			    deleteButton.classList.add('button-error', 'pure-button');
+   			    deleteButton.onclick = function () {
+   			        if (confirm('確定刪除此組座位設定？')) {
+   			            tableBody.removeChild(newRow);  // 刪除新增的行
+   			        }
+   			    };
 
-   	            // 清除複製表單中的輸入內容（這步可選）
-   	            const inputs = newForm.querySelectorAll('input');
-   	            inputs.forEach(input => input.value = '');
+   			    // 把刪除按鈕加到新行中的最後一個 <td>
+   			    newRow.cells[3].appendChild(deleteButton);
 
-   	            // 將複製的表單添加到容器中
-   	            formContainer.appendChild(newForm);
-   	        }
+   			    // 將新複製的行添加到表格中
+   			    tableBody.appendChild(newRow);
+   			}
 		</script>
 	</body>
 </html>
