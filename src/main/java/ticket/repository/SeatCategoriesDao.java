@@ -14,13 +14,7 @@ public interface SeatCategoriesDao {
 	
 	// 修改
 	void updateSeatCategory(Integer seatCategoryId, String categoryName, Integer seatPrice, Integer numSeats);
-	
-	void updateCategoryName(Integer seatCategoryId, String categoryName);
-	
-	void updateSeatPrice(Integer seatCategoryId, Integer seatPrice);
-	
-	void updateNumSeats(Integer seatCategoryId, Integer numSeats);
-	
+		
 	// 刪除
 	void deleteSeatCategories(Integer seatCategoryId);
 }

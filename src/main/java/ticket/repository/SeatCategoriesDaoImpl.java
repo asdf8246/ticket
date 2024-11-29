@@ -57,53 +57,6 @@ public class SeatCategoriesDaoImpl extends BaseDao implements SeatCategoriesDao{
 		}
 	}
 
-	@Override
-	public void updateCategoryName(Integer seatCategoryId, String categoryName) {
-		String sql = "update seat_categories set category_name=? where seat_category_id=?";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, categoryName);
-			pstmt.setInt(2, seatCategoryId);
-			
-			int rowcount = pstmt.executeUpdate();
-			if (rowcount != 1) {
-				throw new RuntimeException("修改失敗 Id:" + seatCategoryId + "name:" + categoryName);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void updateSeatPrice(Integer seatCategoryId, Integer seatPrice) {
-		String sql = "update seat_categories set seat_price=? where seat_category_id=?";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, seatPrice);
-			pstmt.setInt(2, seatCategoryId);
-			
-			int rowcount = pstmt.executeUpdate();
-			if (rowcount != 1) {
-				throw new RuntimeException("修改失敗 Id:" + seatCategoryId + "name:" + seatPrice);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void updateNumSeats(Integer seatCategoryId, Integer numSeats) {
-		String sql = "update seat_categories set num_seats=? where seat_category_id=?";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, numSeats);
-			pstmt.setInt(2, seatCategoryId);
-			
-			int rowcount = pstmt.executeUpdate();
-			if (rowcount != 1) {
-				throw new RuntimeException("修改失敗 Id:" + seatCategoryId + "name:" + numSeats);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void deleteSeatCategories(Integer seatCategoryId) {
