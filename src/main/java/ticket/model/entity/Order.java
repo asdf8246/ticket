@@ -31,4 +31,8 @@ public class Order {
 	private Integer orderPrice;
 	private String orderDate;
 	private String orderStatus;
+	
+	private Integer seatId;
+	private String categoryName;
+	private Integer seatNumber;
 }
