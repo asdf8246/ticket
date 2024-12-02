@@ -54,9 +54,14 @@ public class EventServlet extends HttpServlet {
 			resp.sendRedirect("/ticket/event");
 			return;
 		}
-		if (pathInfo.equals("/buy")) {
+		if (pathInfo.equals("/view")) {
 			String eventId = req.getParameter("eventId");
+			EventDto eventDto = eventService.getEvent(eventId);
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
+			req.setAttribute("eventDto", eventDto);
+			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
+			req.getRequestDispatcher("/WEB-INF/view/event_view.jsp").forward(req, resp);
+			return;
 		}
 	}
 

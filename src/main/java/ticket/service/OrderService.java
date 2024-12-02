@@ -1,5 +1,6 @@
 package ticket.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,18 @@ public class OrderService {
 		return orderDtos;
 	}
 	
-	public Integer addOrder(String userId, String eventName, String orderPrice, String orderDate) {
-		Integer orderId = orderDao.addOrder(Integer.parseInt(userId), eventName, Integer.parseInt(orderPrice), orderDate);
+	public Integer addOrder(Integer userId, String eventName, String[] orderPrices, String[] numSeats, String orderDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		Integer orderPrice = 0;
+		for(int i=0;i<orderPrices.length;i++) {
+			Integer price = Integer.parseInt(orderPrices[i]);
+			Integer numSeat = Integer.parseInt(numSeats[i]);
+			
+			orderPrice = (price * numSeat) + orderPrice;
+		}
+		
+		Integer orderId = orderDao.addOrder(userId, eventName, orderPrice, sdf.format(orderDate));
 		return orderId;
 	}
 	
