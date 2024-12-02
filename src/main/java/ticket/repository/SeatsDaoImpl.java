@@ -46,7 +46,7 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 	}
 
 	@Override
-	public void UpdateSeatsStatus(List<Integer> seatIds, String seatStatus) {
+	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus) {
 		String sql = "update seats set seat_status = ? where seat_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

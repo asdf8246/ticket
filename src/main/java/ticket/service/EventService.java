@@ -3,8 +3,6 @@ package ticket.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.tags.shaded.org.apache.regexp.recompile;
-
 import ticket.model.dto.EventDto;
 import ticket.model.entity.Events;
 import ticket.repository.EventDao;
