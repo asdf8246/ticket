@@ -9,8 +9,4 @@ public class SeatsDto {
 	private Integer seatCategoryId;
 	private Integer seatNumber;
 	private String seatStatus;
-	
-	
-	//外加欄位
-	private Integer numSeats; //所需座位數量
 }

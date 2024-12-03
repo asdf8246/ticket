@@ -13,15 +13,18 @@ import jakarta.servlet.http.HttpSession;
 import ticket.model.dto.EventDto;
 import ticket.model.dto.SeatCategoriesDto;
 import ticket.model.dto.UserCert;
+import ticket.model.entity.Seats;
 import ticket.service.EventService;
 import ticket.service.OrderService;
 import ticket.service.SeatCategoriesService;
+import ticket.service.SeatsService;
 
 @WebServlet(urlPatterns = {"/order/*"})
 public class OrderServlet extends HttpServlet{
 	private OrderService orderService = new OrderService();
 	private EventService eventService = new EventService();
 	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
+	private SeatsService seatsService = new SeatsService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,16 +48,20 @@ public class OrderServlet extends HttpServlet{
 		
 		// 獲取伺服器當前時間
         String orderDate = LocalDateTime.now().toString(); // 例如：2024-12-02T15:30:00
+        
+        String eventId = req.getParameter("eventId");
 		String eventName = req.getParameter("eventName");
 		
-		String[] numSeats = req.getParameterValues("numSeats");
+		String[] numSeatss = req.getParameterValues("numSeatss");
 		String[] seatPrices = req.getParameterValues("seatPrices");
-		String[] categoryNames = req.getParameterValues("categoryNames");
+		String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
 		
 		if (pathInfo.equals("/buy")) {
 			HttpSession session = req.getSession();
 			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
-			Integer orderId = orderService.addOrder(userCert.getUserId(), eventName, seatPrices, numSeats, orderDate);
+			Integer orderId = orderService.addOrder(userCert.getUserId(), eventName, seatPrices, numSeatss, orderDate);
+			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
+			orderService.addOrderSeats(orderId, seatPrices, categoryNames, categoryNames);
 		}
 	}
 	

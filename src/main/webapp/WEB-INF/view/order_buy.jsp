@@ -51,7 +51,8 @@
 			活動地點: ${ eventDto.venue }<p />
 		</div>
 		<form id="orderTicket" class="pure-form" method="post" action="/ticket/order/buy">
-		 <input type="hidden" name="eventName" value="${eventDto.eventName}">
+		<input type="hidden" name="eventId" value="${eventDto.eventId}">
+		<input type="hidden" name="eventName" value="${eventDto.eventName}">
 		<div class="pure-form" style="padding: 15px;">
 			<h3>活動票券</h3>
 			<fieldset>
@@ -64,9 +65,9 @@
 					<tbody>
 					<c:forEach var="seatCategoriesDto" items="${ seatCategoriesDto }">
 						<tr>
-							<td>${ seatCategoriesDto.categoryName }<input type="hidden" name="categoryNames" value="${ seatCategoriesDto.categoryName }"></td>
+							<td>${ seatCategoriesDto.categoryName }<input type="hidden" name="seatCategoryIds" value="${ seatCategoriesDto.seatCategoryId }"></td>
 							<td>${ seatCategoriesDto.seatPrice }<input type="hidden" name="seatPrices" value="${ seatCategoriesDto.seatPrice }"></td>
-							<td><input type="number" name="numSeats" style="width: 75px" min="0" max="2" value="0" required></td>
+							<td><input type="number" name="numSeatss" style="width: 75px" min="0" max="2" value="0" required></td>
 						</tr>
 					</c:forEach>
 					</tbody>

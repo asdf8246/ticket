@@ -22,4 +22,7 @@ public class Seats {
 	private Integer seatNumber;
 	private String seatStatus;
 	
+	private String categoryName;
+	private Integer numSeats;
+
 }
