@@ -61,7 +61,9 @@ public class OrderServlet extends HttpServlet{
 			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 			Integer orderId = orderService.addOrder(userCert.getUserId(), eventName, seatPrices, numSeatss, orderDate);
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
-			orderService.addOrderSeats(orderId, seatPrices, categoryNames, categoryNames);
+			orderService.addOrderSeats(orderId, seats);
+			resp.sendRedirect("/order/pay");
+			return;
 		}
 	}
 	

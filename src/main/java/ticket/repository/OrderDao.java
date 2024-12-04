@@ -13,7 +13,7 @@ public interface OrderDao {
 	List<Order> getOrderSeats(Integer orderId);
 	
 	//新增訂單
-	Integer addOrder(Integer userId, String eventName, Integer orderPrice, String orderDate);
+	Integer addOrder(Order order);
 	
 	//新增訂單關聯表內容
 	void addOrderSeats(List<Order> orders);

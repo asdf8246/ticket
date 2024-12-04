@@ -6,6 +6,7 @@ import java.util.List;
 
 import ticket.model.dto.OrderDto;
 import ticket.model.entity.Order;
+import ticket.model.entity.Seats;
 import ticket.repository.OrderDao;
 import ticket.repository.OrderDaoImpl;
 
@@ -47,7 +48,7 @@ public class OrderService {
 	
 	public Integer addOrder(Integer userId, String eventName, String[] orderPrices, String[] numSeatss, String orderDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
+		Order order = new Order();
 		Integer orderPrice = 0;
 		for(int i=0;i<orderPrices.length;i++) {
 			Integer price = Integer.parseInt(orderPrices[i]);
@@ -55,24 +56,24 @@ public class OrderService {
 			
 			orderPrice = (price * numSeats) + orderPrice;
 		}
+		order.setUserId(userId);
+		order.setEventName(eventName);
+		order.setOrderPrice(orderPrice);
+		order.setOrderDate(sdf.format(orderDate));
 		
-		Integer orderId = orderDao.addOrder(userId, eventName, orderPrice, sdf.format(orderDate));
+		Integer orderId = orderDao.addOrder(order);
 		return orderId;
 	}
 	
-	public void addOrderSeats(Integer orderId , String[] seatIds, String[] categoryNames, String[] seatNumbers) {
+	public void addOrderSeats(Integer orderId , List<Seats> seats) {
 		List<Order> orders = new ArrayList<Order>();
 		
-		for(int i=0;i<seatIds.length;i++) {
-			Integer seatId = Integer.parseInt(seatIds[i]);
-			String categoryName = categoryNames[i];
-			Integer seatNumber = Integer.parseInt(seatNumbers[i]);
-			
+		for (Seats seat : seats) {
 			Order order = new Order();
 			order.setOrderId(orderId);
-			order.setSeatId(seatId);
-			order.setCategoryName(categoryName);
-			order.setSeatNumber(seatNumber);
+			order.setSeatId(seat.getSeatId());
+			order.setCategoryName(seat.getCategoryName());
+			order.setSeatNumber(seat.getSeatNumber());
 			
 			orders.add(order);
 		}

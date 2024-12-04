@@ -21,8 +21,10 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 							""".trim();
 		
 		String selectSQL = """
-							select seats.seat_id, event_id, seat_category_id, seats.seat_number, seats.seat_status, seat_categories.category_name
-							from seats, seat_categories where event_id = ? and seat_category_id = ? and seat_status = 'reserved'
+							select a.seat_id, a.event_id, a.seat_category_id, a.seat_number, a.seat_status, b.category_name
+							from seats a inner join seat_categories b
+							on a.event_id = b.event_id and a.seat_category_id = b.seat_category_id 
+							where a.event_id = ? and a.seat_category_id = ? and a.seat_status = 'reserved'
 							order by seat_number limit ?
 							""".trim();
 
@@ -53,11 +55,11 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 					
 					while(rs.next()) {
 						Seats seat2 = new Seats();
-						seat.setSeatId(rs.getInt("seat_id"));
-						seat.setEventId(rs.getInt("event_id"));
-						seat.setSeatCategoryId(rs.getInt("seat_category_id"));
-						seat.setSeatNumber(rs.getInt("seat_number"));
-						seat.setSeatStatus(rs.getString("seat_status"));
+						seat2.setSeatId(rs.getInt("seat_id"));
+						seat2.setEventId(rs.getInt("event_id"));
+						seat2.setSeatCategoryId(rs.getInt("seat_category_id"));
+						seat2.setSeatNumber(rs.getInt("seat_number"));
+						seat2.setCategoryName(rs.getString("category_name"));
 						
 						orderSeats.add(seat2);
 					}
@@ -73,6 +75,7 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 					ex.printStackTrace();
 				}
 			}
+			e.printStackTrace();
 		}
 		return orderSeats;
 	}
