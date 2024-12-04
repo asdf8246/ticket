@@ -30,6 +30,20 @@ public class OrderService {
 		return orderDtos;
 	}
 	
+	public OrderDto getOrder(String orderId) {
+		Order order = orderDao.getOrder(Integer.parseInt(orderId));
+		if (order==null) {
+			return null;
+		}
+		OrderDto orderDto = new OrderDto();
+		orderDto.setOrderId(order.getOrderId());
+		orderDto.setUserId(order.getUserId());
+		orderDto.setEventName(order.getEventName());
+		orderDto.setOrderPrice(order.getOrderPrice());
+		orderDto.setOrderDate(order.getOrderDate());
+		return orderDto;
+	}
+	
 	public List<OrderDto> getOrderSeats(String orderId) {
 		List<OrderDto> orderDtos = new ArrayList<OrderDto>();
 		List<Order> orders = orderDao.getOrderSeats(Integer.parseInt(orderId));

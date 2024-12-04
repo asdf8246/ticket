@@ -35,6 +35,28 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 		}
 		return orders;
 	}
+	
+	@Override
+	public Order getOrder(Integer orderId) {
+		String sql = "select * from orders where order_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, orderId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				if (rs.next()) {
+					Order order = new Order();
+					order.setOrderId(rs.getInt("order_id"));
+					order.setUserId(rs.getInt("user_id"));
+					order.setEventName(rs.getString("event_name"));
+					order.setOrderPrice(rs.getInt("order_price"));
+					order.setOrderDate(rs.getString("order_date"));
+					return order;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public List<Order> getOrderSeats(Integer orderId) {

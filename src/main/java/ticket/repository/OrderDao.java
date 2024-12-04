@@ -9,6 +9,9 @@ public interface OrderDao {
 	// 取得該用戶訂單
 	List<Order> findAllOrders(Integer userId);
 	
+	// 取得該訂單
+	Order getOrder(Integer orderId);
+	
 	//取得訂單內容
 	List<Order> getOrderSeats(Integer orderId);
 	
