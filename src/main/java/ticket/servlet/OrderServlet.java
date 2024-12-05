@@ -42,7 +42,9 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/pay")) {
 			String orderId = req.getParameter("orderId");
 			OrderDto orderDto = orderService.getOrder(orderId);
+			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			req.setAttribute("orderDto", orderDto);
+			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);
 		}
 	}
