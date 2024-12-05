@@ -40,7 +40,7 @@
 		</div>
 		<div>
 			票價合計: ${ orderDto.orderPrice }<p />
-			<a href="/ticket/order/cancel" class="button-error pure-button">取消</a>
+			<a href="/ticket/order/cancel?orderId=${ orderDto.orderId }" class="button-error pure-button">取消</a>
 			<a href="" class="button-secondary pure-button">付款</a>
 		</div>
 </body>

@@ -46,6 +46,16 @@ public class OrderServlet extends HttpServlet{
 			req.setAttribute("orderDto", orderDto);
 			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);
+			return;
+		}
+		if (pathInfo.equals("/cancel")) {
+			String orderId = req.getParameter("orderId");
+			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
+			String seatStatus = "available";
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			orderService.deleteOrder(orderId);
+			resp.sendRedirect("/ticket/index.html");
+			return;
 		}
 	}
 

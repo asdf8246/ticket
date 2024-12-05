@@ -23,4 +23,7 @@ public interface OrderDao {
 	
 	//更改訂單狀態
 	void updateOrderStatus(Integer orderId, String orderStatus);
+	
+	// 刪除
+	void deleteOrder(Integer orderId);
 }

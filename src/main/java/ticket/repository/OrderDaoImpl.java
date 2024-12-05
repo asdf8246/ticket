@@ -133,6 +133,22 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 		
 	}
 
+	@Override
+	public void deleteOrder(Integer orderId) {
+		String sql = "delete from orders where order_id = ?";
+try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			
+			pstmt.setInt(1, orderId);
+			
+			int rowcount = pstmt.executeUpdate();
+			if (rowcount != 1) {
+				throw new RuntimeException("刪除失敗 Id:" + orderId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	
 }

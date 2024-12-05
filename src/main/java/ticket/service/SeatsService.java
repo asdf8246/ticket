@@ -3,6 +3,7 @@ package ticket.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import ticket.model.dto.OrderDto;
 import ticket.model.entity.Seats;
 import ticket.repository.SeatsDao;
 import ticket.repository.SeatsDaoImpl;
@@ -30,6 +31,14 @@ public class SeatsService {
 			seats.add(seat);
 		}
 		return seatsDao.buySeat(seats);
+	}
+	
+	public void updateSeatsStatus(List<OrderDto> orderSeatsDto, String seatStatus) {
+		List<Integer> seatIds = new ArrayList<Integer>();
+		for (OrderDto orderDto : orderSeatsDto) {
+			seatIds.add(orderDto.getSeatId());
+		}
+		seatsDao.updateSeatsStatus(seatIds, seatStatus);
 	}
 	
 }

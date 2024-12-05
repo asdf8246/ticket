@@ -94,4 +94,7 @@ public class OrderService {
 		orderDao.addOrderSeats(orders);
 	}
 	
+	public void deleteOrder(String orderId) {
+		orderDao.deleteOrder(Integer.parseInt(orderId));
+	}
 }
