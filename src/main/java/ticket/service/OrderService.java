@@ -61,7 +61,6 @@ public class OrderService {
 	}
 	
 	public Integer addOrder(Integer userId, String eventName, String[] orderPrices, String[] numSeatss, String orderDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Order order = new Order();
 		Integer orderPrice = 0;
 		for(int i=0;i<orderPrices.length;i++) {
@@ -73,7 +72,7 @@ public class OrderService {
 		order.setUserId(userId);
 		order.setEventName(eventName);
 		order.setOrderPrice(orderPrice);
-		order.setOrderDate(sdf.format(orderDate));
+		order.setOrderDate(orderDate);
 		
 		Integer orderId = orderDao.addOrder(order);
 		return orderId;

@@ -2,6 +2,7 @@ package ticket.servlet;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -61,7 +62,7 @@ public class OrderServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String pathInfo = req.getPathInfo();
         
         String eventId = req.getParameter("eventId");
@@ -73,14 +74,14 @@ public class OrderServlet extends HttpServlet{
 		
 		if (pathInfo.equals("/buy")) {
 			// 獲取伺服器當前時間
-	        String orderDate = LocalDateTime.now().toString(); // 例如：2024-12-02T15:30:00
+	        String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
 			HttpSession session = req.getSession();
 			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 			Integer userId = userCert.getUserId();
 			Integer orderId = orderService.addOrder(userId, eventName, seatPrices, numSeatss, orderDate);
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
 			orderService.addOrderSeats(orderId, seats);
-			resp.sendRedirect("/order/pay?orderId=" + orderId);
+			resp.sendRedirect("/ticket/order/pay?orderId=" + orderId);
 			return;
 		}
 	}
