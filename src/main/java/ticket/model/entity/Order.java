@@ -9,7 +9,7 @@ import lombok.Data;
     event_name VARCHAR(255) NOT NULL,
     order_price INT NOT NULL,  -- 實際支付的票價
     order_date DATETIME NOT NULL,
-    ticket_status ENUM('pending', 'paid', 'canceled') DEFAULT 'pending',  -- 訂單狀態
+    order_status ENUM('pending', 'paid', 'canceled') DEFAULT 'pending',  -- 訂單狀態
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 

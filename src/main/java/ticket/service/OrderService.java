@@ -1,6 +1,5 @@
 package ticket.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +41,24 @@ public class OrderService {
 		orderDto.setOrderPrice(order.getOrderPrice());
 		orderDto.setOrderDate(order.getOrderDate());
 		return orderDto;
+	}
+	
+	public List<OrderDto> getUserOrders(Integer userId){
+		List<Order> orders = orderDao.getUserOrders(userId);
+		List<OrderDto> orderDtos = new ArrayList<OrderDto>();
+		
+		for(Order order : orders) {
+			OrderDto orderDto = new OrderDto();
+			orderDto.setOrderId(order.getOrderId());
+			orderDto.setUserId(order.getUserId());
+			orderDto.setEventName(order.getEventName());
+			orderDto.setOrderPrice(order.getOrderPrice());
+			orderDto.setOrderDate(order.getOrderDate());
+			orderDto.setOrderStatus(order.getOrderStatus());
+			
+			orderDtos.add(orderDto);
+		}
+		return orderDtos;
 	}
 	
 	public List<OrderDto> getOrderSeats(String orderId) {
@@ -95,5 +112,9 @@ public class OrderService {
 	
 	public void deleteOrder(String orderId) {
 		orderDao.deleteOrder(Integer.parseInt(orderId));
+	}
+	
+	public void updateOrderStatus(String orderId, String orderStatus) {
+		orderDao.updateOrderStatus(Integer.parseInt(orderId), orderStatus);
 	}
 }

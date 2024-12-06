@@ -58,6 +58,16 @@ public class OrderServlet extends HttpServlet{
 			resp.sendRedirect("/ticket/index.html");
 			return;
 		}
+		if (pathInfo.equals("/finish")) {
+			String orderId = req.getParameter("orderId");
+			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
+			String seatStatus = "sold";
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			String orderStatus = "paid";
+			orderService.updateOrderStatus(orderId, orderStatus);
+			resp.sendRedirect("/ticket/user/order");
+			return;
+		}
 	}
 
 	@Override

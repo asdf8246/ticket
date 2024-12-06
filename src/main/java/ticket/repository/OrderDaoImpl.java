@@ -57,6 +57,31 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 		}
 		return null;
 	}
+	
+	@Override
+	public List<Order> getUserOrders(Integer userId){
+		List<Order> userOrders = new ArrayList<Order>();
+		String sql = "select * from orders where user_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, userId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				while (rs.next()) {
+					Order order = new Order();
+					order.setOrderId(rs.getInt("order_id"));
+					order.setUserId(rs.getInt("user_id"));
+					order.setEventName(rs.getString("event_name"));
+					order.setOrderPrice(rs.getInt("order_price"));
+					order.setOrderDate(rs.getString("order_date"));
+					order.setOrderStatus(rs.getString("order_status"));
+					
+					userOrders.add(order);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userOrders;
+	}
 
 	@Override
 	public List<Order> getOrderSeats(Integer orderId) {
@@ -129,14 +154,21 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 	
 	@Override
 	public void updateOrderStatus(Integer orderId, String orderStatus) {
-		// TODO Auto-generated method stub
-		
+		String sql = "update orders set order_status = ? where order_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, orderStatus);
+			pstmt.setInt(2, orderId);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteOrder(Integer orderId) {
 		String sql = "delete from orders where order_id = ?";
-try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			
 			pstmt.setInt(1, orderId);
 			

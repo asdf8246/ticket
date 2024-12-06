@@ -9,8 +9,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ticket.model.dto.OrderDto;
 import ticket.model.dto.UserCert;
 import ticket.model.dto.UserDto;
+import ticket.service.OrderService;
 import ticket.service.UserService;
 
 
@@ -41,6 +43,8 @@ import ticket.service.UserService;
 public class UserServlet extends HttpServlet {
 
 	private UserService userService = new UserService();
+	private OrderService orderService = new OrderService();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
@@ -70,6 +74,14 @@ public class UserServlet extends HttpServlet {
 			return;
 		} else if (pathInfo.equals("/update/password")) { //修改密碼頁面
 			req.getRequestDispatcher("/WEB-INF/view/update_password.jsp").forward(req, resp);
+			return;
+		} else if (pathInfo.equals("/order")) {
+			HttpSession session = req.getSession();
+			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+			Integer userId = userCert.getUserId();
+			List<OrderDto> orderDtos = orderService.getUserOrders(userId);
+			req.setAttribute("orderDtos", orderDtos);
+			req.getRequestDispatcher("/WEB-INF/view/user_order.jsp").forward(req, resp);
 			return;
 		}
 	}

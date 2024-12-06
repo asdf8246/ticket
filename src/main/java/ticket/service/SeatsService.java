@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ticket.model.dto.OrderDto;
+import ticket.model.entity.Order;
 import ticket.model.entity.Seats;
 import ticket.repository.SeatsDao;
 import ticket.repository.SeatsDaoImpl;
@@ -30,7 +31,8 @@ public class SeatsService {
 			
 			seats.add(seat);
 		}
-		return seatsDao.buySeat(seats);
+		List<Seats> orderSeats = seatsDao.buySeat(seats);
+		return orderSeats;
 	}
 	
 	public void updateSeatsStatus(List<OrderDto> orderSeatsDto, String seatStatus) {

@@ -36,7 +36,7 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 		    
 		    // 2. 更新座位狀態為 'reserved'
 		    updateStmt.clearBatch();
-		    for (Seats seat : seats) {
+		   for (Seats seat : seats) {
 		    	updateStmt.setInt(1, seat.getEventId());
 		    	updateStmt.setInt(2, seat.getSeatCategoryId());
 		    	updateStmt.setInt(3, seat.getNumSeats());
@@ -65,6 +65,7 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 					}
 				}
 		    }
+		    
 		    // 提交事務
 		    conn.commit();
 		} catch (SQLException e) {
@@ -76,6 +77,12 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 				}
 			}
 			e.printStackTrace();
+		} finally {
+		    try {
+				conn.setAutoCommit(true);// 恢复自动提交
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}  
 		}
 		return orderSeats;
 	}

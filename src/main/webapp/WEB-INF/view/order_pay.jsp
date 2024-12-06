@@ -19,6 +19,7 @@
 			<h2>${ orderDto.eventName }</h2>
 			訂單成立: ${ orderDto.orderDate }<p />
 		</div>
+		<input type="hidden" name="eventId" value="${ orderDto.eventId }">
 		<div class="pure-form" style="padding: 15px;">
 			<h3>購票總覽</h3>
 			<fieldset>
@@ -33,14 +34,16 @@
 						<tr>
 							<td>${ orderSeatsDto.categoryName }</td><td>${ orderSeatsDto.seatNumber }</td>
 						</tr>
-					</tbody>
+					<input type="hidden" name="seatIds" value="${ orderSeatsDto.seatId }">
 					</c:forEach>
+					</tbody>
 				</table>
 			</fieldset>
 		</div>
+		<div class="pure-form" style="padding: 15px;">
 			票價合計: ${ orderDto.orderPrice }<p />
 			<a href="/ticket/order/cancel?orderId=${ orderDto.orderId }" class="button-error pure-button">取消</a>
-			<a href="" class="button-secondary pure-button">付款</a>
+			<a href="/ticket/order/finish?orderId=${ orderDto.orderId }" class="button-secondary pure-button">付款</a>
 		</div>
 </body>
 </html>
