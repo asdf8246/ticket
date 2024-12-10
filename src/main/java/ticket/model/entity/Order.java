@@ -6,6 +6,7 @@ import lombok.Data;
  CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,  -- 預訂者的用戶 ID
+    event_id INT NOT NULL,
     event_name VARCHAR(255) NOT NULL,
     order_price INT NOT NULL,  -- 實際支付的票價
     order_date DATETIME NOT NULL,
@@ -27,6 +28,7 @@ import lombok.Data;
 public class Order {
 	private Integer orderId;
 	private Integer userId;
+	private Integer eventId;
 	private String eventName;
 	private Integer orderPrice;
 	private String orderDate;
@@ -35,4 +37,6 @@ public class Order {
 	private Integer seatId;
 	private String categoryName;
 	private Integer seatNumber;
+	private Integer seatPrice;
+	
 }

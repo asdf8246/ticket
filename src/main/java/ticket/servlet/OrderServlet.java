@@ -20,6 +20,7 @@ import ticket.service.EventService;
 import ticket.service.OrderService;
 import ticket.service.SeatCategoriesService;
 import ticket.service.SeatsService;
+import ticket.utils.CheckUser;
 
 @WebServlet(urlPatterns = {"/order/*"})
 public class OrderServlet extends HttpServlet{
@@ -27,10 +28,15 @@ public class OrderServlet extends HttpServlet{
 	private EventService eventService = new EventService();
 	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
 	private SeatsService seatsService = new SeatsService();
+	private CheckUser checkUser = new CheckUser();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
+		HttpSession session = req.getSession();
+		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+		Integer userId = userCert.getUserId();
+		
 		if (pathInfo.equals("/buy")) {
 			String eventId = req.getParameter("eventId");
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
@@ -49,8 +55,15 @@ public class OrderServlet extends HttpServlet{
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);
 			return;
 		}
-		if (pathInfo.equals("/cancel")) {
+		if (pathInfo.equals("/delete")) {
 			String orderId = req.getParameter("orderId");
+			
+			if (!checkUser.checkOrderUser(orderId, userId) || !checkUser.checkUserRole(userId)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "available";
 			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
@@ -68,6 +81,16 @@ public class OrderServlet extends HttpServlet{
 			resp.sendRedirect("/ticket/user/order");
 			return;
 		}
+		if (pathInfo.equals("/cancel")) {
+			String orderId = req.getParameter("orderId");
+			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
+			String seatStatus = "available";
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			String orderStatus = "canceled";
+			orderService.updateOrderStatus(orderId, orderStatus);
+			resp.sendRedirect("/ticket/user/order");
+			return;
+		}
 	}
 
 	@Override
@@ -75,6 +98,10 @@ public class OrderServlet extends HttpServlet{
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String pathInfo = req.getPathInfo();
         
+		HttpSession session = req.getSession();
+		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+		Integer userId = userCert.getUserId();
+		
         String eventId = req.getParameter("eventId");
 		String eventName = req.getParameter("eventName");
 		
@@ -85,10 +112,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/buy")) {
 			// 獲取伺服器當前時間
 	        String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
-			HttpSession session = req.getSession();
-			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
-			Integer userId = userCert.getUserId();
-			Integer orderId = orderService.addOrder(userId, eventName, seatPrices, numSeatss, orderDate);
+			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
 			orderService.addOrderSeats(orderId, seats);
 			resp.sendRedirect("/ticket/order/pay?orderId=" + orderId);

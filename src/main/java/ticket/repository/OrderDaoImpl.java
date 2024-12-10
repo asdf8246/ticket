@@ -22,6 +22,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 					Order order = new Order();
 					order.setOrderId(rs.getInt("order_id"));
 					order.setUserId(rs.getInt("user_id"));
+					order.setEventId(rs.getInt("event_id"));
 					order.setEventName(rs.getString("event_name"));
 					order.setOrderPrice(rs.getInt("order_price"));
 					order.setOrderDate(rs.getString("order_date"));
@@ -46,6 +47,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 					Order order = new Order();
 					order.setOrderId(rs.getInt("order_id"));
 					order.setUserId(rs.getInt("user_id"));
+					order.setEventId(rs.getInt("event_id"));
 					order.setEventName(rs.getString("event_name"));
 					order.setOrderPrice(rs.getInt("order_price"));
 					order.setOrderDate(rs.getString("order_date"));
@@ -69,6 +71,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 					Order order = new Order();
 					order.setOrderId(rs.getInt("order_id"));
 					order.setUserId(rs.getInt("user_id"));
+					order.setEventId(rs.getInt("event_id"));
 					order.setEventName(rs.getString("event_name"));
 					order.setOrderPrice(rs.getInt("order_price"));
 					order.setOrderDate(rs.getString("order_date"));
@@ -86,7 +89,12 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 	@Override
 	public List<Order> getOrderSeats(Integer orderId) {
 		List<Order> orderSeats = new ArrayList<Order>();
-		String sql = "select * from orders_seats where order_id = ?";
+		String sql = """
+						SELECT os.order_id, os.seat_id, os.category_name, os.seat_number, sc.seat_price
+						FROM  orders_seats os JOIN seats s ON os.seat_id = s.seat_id
+						JOIN seat_categories sc ON s.seat_category_id = sc.seat_category_id
+						WHERE os.order_id = ?;
+						""".trim();
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, orderId);
 			try(ResultSet rs = pstmt.executeQuery()){
@@ -96,6 +104,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 					order.setSeatId(rs.getInt("seat_id"));
 					order.setCategoryName(rs.getString("category_name"));
 					order.setSeatNumber(rs.getInt("seat_number"));
+					order.setSeatPrice(rs.getInt("seat_price"));
 					
 					orderSeats.add(order);
 				}
@@ -109,12 +118,13 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 	
 	@Override
 	public Integer addOrder(Order order) {
-		String sql = "insert into orders(user_id, event_name, order_price, order_date) value(?, ?, ?, ?)";
+		String sql = "insert into orders(user_id, event_id, event_name, order_price, order_date) value(?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setInt(1, order.getUserId());
-			pstmt.setString(2, order.getEventName());
-			pstmt.setInt(3, order.getOrderPrice());
-			pstmt.setString(4, order.getOrderDate());
+			pstmt.setInt(2, order.getEventId());
+			pstmt.setString(3, order.getEventName());
+			pstmt.setInt(4, order.getOrderPrice());
+			pstmt.setString(5, order.getOrderDate());
 			
 			int rowcount = pstmt.executeUpdate();
 			if (rowcount != 1) {

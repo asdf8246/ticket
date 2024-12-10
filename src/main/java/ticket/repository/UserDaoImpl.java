@@ -66,6 +66,32 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		}
 		return null;
 	}
+	
+	@Override
+	public User getUser(Integer userId) {
+		String sql = "select user_id, username, phonenumber, password_hash, salt, email, role from users where user_id=?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, userId);
+			
+			try(ResultSet rs = pstmt.executeQuery()){
+				if (rs.next()) { // 若有得到一筆
+					// 建立 user 物件並將資料配置進去
+					User user = new User();
+					user.setId(rs.getInt("user_id"));
+					user.setName(rs.getString("username"));
+					user.setPhonenumber(rs.getString("phonenumber"));
+					user.setPasswordHash(rs.getString("password_hash"));
+					user.setSalt(rs.getString("salt"));
+					user.setEmail(rs.getString("email"));
+					user.setRole(rs.getString("role"));
+					return user; // 返回 user 物件
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public void addUser(User user) {

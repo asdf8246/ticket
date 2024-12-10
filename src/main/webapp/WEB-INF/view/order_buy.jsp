@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %> <!-- 核心庫 -->
+<%@ taglib uri="jakarta.tags.fmt" prefix="f" %> <!-- 格式化庫 -->
     
 <!DOCTYPE html>
 <html>
@@ -66,7 +67,7 @@
 					<c:forEach var="seatCategoriesDto" items="${ seatCategoriesDto }">
 						<tr>
 							<td>${ seatCategoriesDto.categoryName }<input type="hidden" name="seatCategoryIds" value="${ seatCategoriesDto.seatCategoryId }"></td>
-							<td>${ seatCategoriesDto.seatPrice }<input type="hidden" name="seatPrices" value="${ seatCategoriesDto.seatPrice }"></td>
+							<td><f:formatNumber value="${ seatCategoriesDto.seatPrice }" type="currency" maxFractionDigits="0" /><input type="hidden" name="seatPrices" value="${ seatCategoriesDto.seatPrice }"></td>
 							<td><input type="number" name="numSeatss" style="width: 75px" min="0" max="2" value="0" required></td>
 						</tr>
 					</c:forEach>

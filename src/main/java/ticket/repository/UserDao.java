@@ -16,6 +16,8 @@ public interface UserDao {
 	// 單筆:根據 phonenumber 查詢該筆使用者
 	User getUser(String phonenumber);
 	
+	User getUser(Integer userId);
+	
 	// 新增
 	void addUser(User user);
 	

@@ -84,6 +84,15 @@ public class UserServlet extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/view/user_order.jsp").forward(req, resp);
 			return;
 		}
+		else if (pathInfo.equals("/order/view")) {
+			String orderId = req.getParameter("orderId");
+			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
+			OrderDto orderDto = orderService.getOrder(orderId);
+			req.setAttribute("orderSeatsDto", orderSeatsDto);
+			req.setAttribute("orderDto", orderDto);
+			req.getRequestDispatcher("/WEB-INF/view/user_order_view.jsp").forward(req, resp);
+			return;
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

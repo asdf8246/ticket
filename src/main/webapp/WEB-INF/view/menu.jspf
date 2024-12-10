@@ -5,10 +5,6 @@
 	<a href="/ticket/user" class="pure-menu-heading pure-menu-link">使用者維護檔</a>
 	<a href="/ticket/login" class="pure-menu-heading pure-menu-link">登入</a>
 	<a href="/ticket/user/update/password" class="pure-menu-heading pure-menu-link">修改密碼</a>
-	<a href="/ticket/products" class="pure-menu-heading pure-menu-link">商品維護檔</a>
-	<a href="/ticket/order" class="pure-menu-heading pure-menu-link">訂購商品</a>
-	<a href="/ticket/cart" class="pure-menu-heading pure-menu-link">購物車(結帳, 取消)</a>
-	<a href="/ticket/order/history" class="pure-menu-heading pure-menu-link">歷史訂單</a>
-	<a href="/ticket/product/sales/ranking" class="pure-menu-heading pure-menu-link">銷售排行</a>
+	<a href="/ticket/user/order" class="pure-menu-heading pure-menu-link">歷史訂單</a>
 	<a href="/ticket/logout" class="pure-menu-heading pure-menu-link">登出</a>
 </div>

@@ -19,6 +19,7 @@ public class OrderService {
 			OrderDto orderDto = new OrderDto();
 			orderDto.setOrderId(order.getOrderId());
 			orderDto.setUserId(order.getUserId());
+			orderDto.setEventId(order.getEventId());
 			orderDto.setEventName(order.getEventName());
 			orderDto.setOrderPrice(order.getOrderPrice());
 			orderDto.setOrderDate(order.getOrderDate());
@@ -37,6 +38,7 @@ public class OrderService {
 		OrderDto orderDto = new OrderDto();
 		orderDto.setOrderId(order.getOrderId());
 		orderDto.setUserId(order.getUserId());
+		orderDto.setEventId(order.getEventId());
 		orderDto.setEventName(order.getEventName());
 		orderDto.setOrderPrice(order.getOrderPrice());
 		orderDto.setOrderDate(order.getOrderDate());
@@ -51,6 +53,7 @@ public class OrderService {
 			OrderDto orderDto = new OrderDto();
 			orderDto.setOrderId(order.getOrderId());
 			orderDto.setUserId(order.getUserId());
+			orderDto.setEventId(order.getEventId());
 			orderDto.setEventName(order.getEventName());
 			orderDto.setOrderPrice(order.getOrderPrice());
 			orderDto.setOrderDate(order.getOrderDate());
@@ -71,13 +74,14 @@ public class OrderService {
 			orderDto.setSeatId(order.getSeatId());
 			orderDto.setCategoryName(order.getCategoryName());
 			orderDto.setSeatNumber(order.getSeatNumber());
+			orderDto.setSeatPrice(order.getSeatPrice());
 			
 			orderDtos.add(orderDto);
 		}
 		return orderDtos;
 	}
 	
-	public Integer addOrder(Integer userId, String eventName, String[] orderPrices, String[] numSeatss, String orderDate) {
+	public Integer addOrder(Integer userId, String eventId,  String eventName, String[] orderPrices, String[] numSeatss, String orderDate) {
 		Order order = new Order();
 		Integer orderPrice = 0;
 		for(int i=0;i<orderPrices.length;i++) {
@@ -87,6 +91,7 @@ public class OrderService {
 			orderPrice = (price * numSeats) + orderPrice;
 		}
 		order.setUserId(userId);
+		order.setEventId(Integer.parseInt(eventId));
 		order.setEventName(eventName);
 		order.setOrderPrice(orderPrice);
 		order.setOrderDate(orderDate);

@@ -6,6 +6,7 @@ import lombok.Data;
 public class OrderDto {
 	private Integer orderId;
 	private Integer userId;
+	private Integer eventId;
 	private String eventName;
 	private Integer orderPrice;
 	private String orderDate;
@@ -14,4 +15,5 @@ public class OrderDto {
 	private Integer seatId;
 	private String categoryName;
 	private Integer seatNumber;
+	private Integer seatPrice;
 }
