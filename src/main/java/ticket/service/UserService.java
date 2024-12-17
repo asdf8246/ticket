@@ -36,7 +36,7 @@ public class UserService {
 	}
 
 	// 新增使用者
-	public void appendUser(String username, String phonenumber, String password, String email, String role) {
+	public Object appendUser(String username, String phonenumber, String password, String email, String role) {
 		String salt = Hash.getSalt(); // 得到隨機鹽
 		String passwordHash = Hash.getHash(password, salt); // 得到 hash
 		// 根據上列參數封裝到 User 物件中
@@ -48,7 +48,8 @@ public class UserService {
 		user.setEmail(email);
 		user.setRole(role);
 		// 存入(新增使用者): 調用 userDao.addUser(user)
-		userDao.addUser(user);
+		Object message = userDao.addUser(user);
+		return message;
 	}
 
 	// 刪除使用者

@@ -11,7 +11,7 @@
 	        body {
 	            font-family: Arial, sans-serif;
 	            text-align: center;
-	            margin-top: 20%;
+	            margin-top: 13%;
 	        }
 	        .message {
 	            font-size: 24px;

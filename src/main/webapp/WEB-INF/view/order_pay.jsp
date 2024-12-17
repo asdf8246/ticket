@@ -44,7 +44,7 @@
 		</div>
 		<div class="pure-form" style="padding: 15px;">
 			票價合計: <f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" /><p />
-			<a href="/ticket/order/delete?orderId=${ orderDto.orderId }" class="button-error pure-button">取消</a>
+			<a href="/ticket/order/delete?orderId=${ orderDto.orderId }&eventId=${ orderDto.eventId }" class="button-error pure-button">取消</a>
 			<a href="/ticket/order/finish?orderId=${ orderDto.orderId }" class="button-secondary pure-button">付款</a>
 		</div>
 </body>

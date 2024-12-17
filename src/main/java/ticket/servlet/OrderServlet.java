@@ -1,9 +1,12 @@
 package ticket.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import com.google.gson.JsonObject;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -63,16 +66,23 @@ public class OrderServlet extends HttpServlet{
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
 			}
-			
+			String eventId = req.getParameter("eventId");
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "available";
 			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
 			orderService.deleteOrder(orderId);
-			resp.sendRedirect("/ticket/index.html");
+			resp.sendRedirect("/ticket/event/view?eventId=" + eventId);
 			return;
 		}
 		if (pathInfo.equals("/finish")) {
 			String orderId = req.getParameter("orderId");
+			
+			if (!checkUser.checkOrderUser(orderId, userId)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "sold";
 			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
@@ -83,6 +93,13 @@ public class OrderServlet extends HttpServlet{
 		}
 		if (pathInfo.equals("/cancel")) {
 			String orderId = req.getParameter("orderId");
+			
+			if (!checkUser.checkOrderUser(orderId, userId) || !checkUser.checkUserRole(userId)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "available";
 			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
@@ -114,6 +131,24 @@ public class OrderServlet extends HttpServlet{
 	        String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
 			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
+			
+			if (seats == null) {
+				// 构建消息和跳转 URL
+		        String message = "票券已完售!";
+		        String redirectUrl = "/ticket/event/view?eventId=" + eventId;  // 替换为目标页面的 URL
+
+		        // 创建响应对象（将消息和跳转 URL 传递到前端）
+		        JsonObject jsonResponse = new JsonObject();
+		        jsonResponse.addProperty("message", message);
+		        jsonResponse.addProperty("redirectUrl", redirectUrl);
+
+		        // 输出 JSON 响应
+		        PrintWriter out = resp.getWriter();
+		        out.print(jsonResponse.toString());
+		        out.flush();
+		        return;
+			}
+			
 			orderService.addOrderSeats(orderId, seats);
 			resp.sendRedirect("/ticket/order/pay?orderId=" + orderId);
 			return;

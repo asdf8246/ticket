@@ -19,7 +19,7 @@ public interface UserDao {
 	User getUser(Integer userId);
 	
 	// 新增
-	void addUser(User user);
+	Object addUser(User user);
 	
 	// 修改姓名
 	void updateName(Integer Id,String name);

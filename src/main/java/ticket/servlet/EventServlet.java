@@ -1,13 +1,16 @@
 package ticket.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import ticket.model.dto.EventDto;
 import ticket.model.dto.SeatCategoriesDto;
 import ticket.service.EventService;
@@ -22,6 +25,11 @@ import ticket.service.SeatCategoriesService;
  */
 
 @WebServlet(urlPatterns = {"/event/*"})
+@MultipartConfig(
+	    maxFileSize = 10485760,      // 10MB
+	    maxRequestSize = 20971520,   // 20MB
+	    fileSizeThreshold = 0        // 不將文件寫入硬碟，全部在內存中處理
+)
 public class EventServlet extends HttpServlet {
 	private EventService eventService = new EventService();
 	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
@@ -74,22 +82,42 @@ public class EventServlet extends HttpServlet {
 		String venue = req.getParameter("venue");
 		String description = req.getParameter("description");
 		
+		String sellDate = req.getParameter("sellDate");
+		String county = req.getParameter("county");
+		String district = req.getParameter("district");
+		String address = county + district + req.getParameter("address");
+		
 		String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
 		String[] categoryNames = req.getParameterValues("categoryName");
 		String[] seatPrices = req.getParameterValues("seatPrice"); 
 		String[] numSeatss = req.getParameterValues("numSeats"); 
 		
-		switch (pathInfo) {
-		case "/add" :
-			Integer seatEventId = eventService.appendEvent(eventName, eventDate, venue, description);
+		if (pathInfo.equals("/add")) {
+			// 獲取檔案
+	        Part filePart = req.getPart("file");
+	        if (filePart == null) {
+	        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "檔案上傳失敗，未選擇檔案！");
+	        	return;
+	        }
+	        InputStream eventImage = filePart.getInputStream();
+			
+			Integer seatEventId = eventService.appendEvent(eventName, eventDate, sellDate, venue, address, description, eventImage);			
 			seatCategoriesService.appendSeatCategory(seatEventId, categoryNames, seatPrices, numSeatss);
 			resp.sendRedirect("/ticket/event");
-			break;
-		case "/update":
-			eventService.updateEvent(eventId, eventName, eventDate, venue, description);
+			return;
+		}
+		if (pathInfo.equals("/update")) {
+			
+			Part filePart = req.getPart("file");
+			InputStream eventImage = null;
+	        if (filePart != null) {
+	        	eventImage = filePart.getInputStream();
+	        }
+			
+			eventService.updateEvent(eventId, eventName, eventDate, sellDate, venue, address, description, eventImage);
 			seatCategoriesService.updateSeatCategory(eventId, seatCategoryIds, categoryNames, seatPrices, numSeatss);
 			resp.sendRedirect("/ticket/event");
-			break;
+			return;
 		}
 	}
 	

@@ -11,6 +11,7 @@
 		<title>Event</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 	</head>
 	<body>
 		<!-- menu bar include -->
@@ -22,19 +23,23 @@
 					<table class="pure-table pure-table-bordered">
 						<thead>
 							<tr>
-								<th>活動名稱</th><th>活動日期</th><th>活動地點</th><th>活動簡介</th>
-								<th>修改</th><th>刪除</th>
+								<th></th><th>活動名稱</th><th>開賣日期</th><th>活動日期</th><th>活動地點</th><th>活動地址</th><th>活動簡介</th><th>活動狀態</th>
+								<th></th>
 							</tr>
 						</thead>
 						<c:forEach var="eventDto" items="${ eventDtos }">
 							<tr>
+								<td class="columnImage"><img src="<c:url value='/image?id=${eventDto.eventId}&timestamp=${System.currentTimeMillis()}' />" alt="Event Image" class="column-image" /></td>
 								<td>${ eventDto.eventName }</td>
+								<td>${ eventDto.sellDate }</td>
 								<td>${ eventDto.eventDate }</td>
 								<td>${ eventDto.venue }</td>
+								<td>${ eventDto.address }</td>
 								<td>${ eventDto.description }</td>
-								<td><a href="/ticket/event/get?eventId=${ eventDto.eventId }" class="button-secondary pure-button">修改</a></td>
-								<td><a href="/ticket/event/delete?eventId=${ eventDto.eventId }" class="button-error pure-button">刪除</a></td>
-								<td><a href="/ticket/event/view?eventId=${ eventDto.eventId }" class="button-success pure-button">檢視</a></td>
+								<td>${ eventDto.eventStatus }</td>
+								<td><a href="/ticket/event/get?eventId=${ eventDto.eventId }" class="button-secondary pure-button">修改</a><p />
+								<a href="/ticket/event/delete?eventId=${ eventDto.eventId }" class="button-error pure-button">刪除</a><p />
+								<a href="/ticket/event/view?eventId=${ eventDto.eventId }" class="button-success pure-button">檢視</a></td>
 							</tr>
 						</c:forEach>
 					</table>

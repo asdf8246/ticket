@@ -94,7 +94,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	@Override
-	public void addUser(User user) {
+	public Object addUser(User user) {
 		String sql = "insert into users(username, phonenumber, password_hash, salt, email, role) value(?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getName());
@@ -108,8 +108,11 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 			if (rowcount !=1) {
 				throw new RuntimeException("新增失敗");
 			}
+			String message = "新增成功";
+			return message;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return "註冊失敗，手機號碼重複!";
 		}
 	}
 

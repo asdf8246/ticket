@@ -1,5 +1,6 @@
 package ticket.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,12 @@ public class EventService {
 			eventDto.setEventId(event.getEventId());
 			eventDto.setEventName(event.getEventName());
 			eventDto.setEventDate(event.getEventDate());
+			eventDto.setSellDate(event.getSellDate());
 			eventDto.setVenue(event.getVenue());
+			eventDto.setAddress(event.getAddress());
 			eventDto.setDescription(event.getDescription());
+			eventDto.setEventStatus(event.getEventStatus());
+			eventDto.setEventImage(event.getEventImage());
 			
 			eventDtos.add(eventDto);
 		}
@@ -30,12 +35,15 @@ public class EventService {
 	}
 	
 	//新增
-	public Integer appendEvent(String eventName, String eventDate, String venue, String description) {
+	public Integer appendEvent(String eventName, String eventDate, String sellDate, String venue, String address, String description, InputStream eventImage) {
 		Events event = new Events();
 		event.setEventName(eventName);
 		event.setEventDate(eventDate);
+		event.setSellDate(sellDate);
 		event.setVenue(venue);
+		event.setAddress(address);
 		event.setDescription(description);
+		event.setEventImage(eventImage);
 		Integer eventId  = eventDao.addEvent(event);
 		return eventId;
 	}
@@ -56,25 +64,38 @@ public class EventService {
 		eventDto.setEventId(event.getEventId());
 		eventDto.setEventName(event.getEventName());
 		eventDto.setEventDate(event.getEventDate());
+		eventDto.setSellDate(event.getSellDate());
 		eventDto.setVenue(event.getVenue());
+		eventDto.setAddress(event.getAddress());
 		eventDto.setDescription(event.getDescription());
+		eventDto.setEventStatus(event.getEventStatus());
+		eventDto.setEventImage(event.getEventImage());
 		
 		return eventDto;
 	}
 	
 	//修改
-	public void updateEvent(String eventId, String eventName, String eventDate, String venue, String description) {
+	public void updateEvent(String eventId, String eventName, String eventDate, String sellDate, String venue, String address, String description, InputStream eventImage) {
 		if (!eventName.isEmpty()) {
 			eventDao.updateEventName(Integer.parseInt(eventId), eventName);
 		}
 		if (!eventDate.isEmpty()) {
 			eventDao.updateEventDate(Integer.parseInt(eventId), eventDate);
 		}
+		if (!sellDate.isEmpty()) {
+			eventDao.updateSellDate(Integer.parseInt(eventId), sellDate);
+		}
 		if (!venue.isEmpty()) {
 			eventDao.updateVenue(Integer.parseInt(eventId), venue);
 		}
+		if (!address.isEmpty()) {
+			eventDao.updateAddress(Integer.parseInt(eventId), address);
+		}
 		if (!description.isEmpty()) {
 			eventDao.updateDescription(Integer.parseInt(eventId), description);
+		}
+		if (eventImage != null) {
+			eventDao.updateEventImage(Integer.parseInt(eventId), eventImage);
 		}
 	}
 }

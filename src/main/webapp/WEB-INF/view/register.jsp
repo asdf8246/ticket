@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>登入</title>
+		<title>註冊</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<style>
@@ -25,45 +25,18 @@
 		</style>
 	</head>
 	<body style="padding: 15px">
-		<form class="pure-form" method="post" action="/ticket/login">
+		<form class="pure-form" method="post" action="/ticket/register">
 			<fieldset>
-				<legend>登入</legend>
-				手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" autofocus required /><p />
-				密碼: <input type="password" name="password" placeholder="請輸入密碼" required /><p />
+				<legend>註冊</legend>
+				姓名: <input type="text" name="username" placeholder="請輸入姓名" required /><p />
+				手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" required><p /> 
+				密碼: <input type="text" name="password" placeholder="請輸入 password" required /><p /> 
+				電郵: <input type="email" name="email" placeholder="請輸入 email" required /><p />
 				<div class="buttons-container">
-					<a href="/ticket/register" class="pure-button">註冊</a>
-					<button type="submit" class="pure-button pure-button-primary">登入</button>
+					<button type="reset" class="pure-button">重置</button>
+					<button type="submit" class="pure-button pure-button-primary">註冊</button>
 				</div>
 			</fieldset>
 		</form>
 	</body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

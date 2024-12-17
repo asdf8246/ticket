@@ -14,6 +14,7 @@ import ticket.model.dto.UserCert;
 import ticket.model.dto.UserDto;
 import ticket.service.OrderService;
 import ticket.service.UserService;
+import ticket.utils.CheckUser;
 
 
 /**
@@ -44,12 +45,24 @@ public class UserServlet extends HttpServlet {
 
 	private UserService userService = new UserService();
 	private OrderService orderService = new OrderService();
+	private CheckUser checkUser = new CheckUser();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
 		//resp.getWriter().print(pathInfo);
+		
+		HttpSession session = req.getSession();
+		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+		Integer certUserId = userCert.getUserId();
+		
 		if (pathInfo == null || pathInfo.equals("/*")) {
+			
+			if (!checkUser.checkUserRole(certUserId)) {
+				resp.sendRedirect("/ticket/index.html");
+				return;
+			}
+			
 			//查詢全部
 			List<UserDto> userDtos = userService.findAll();
 			//resp.getWriter().print(userDtos);
@@ -60,9 +73,22 @@ public class UserServlet extends HttpServlet {
 			return;
 		} else if (pathInfo.equals("/delete")) {
 			String userId = req.getParameter("userId");
+			
+			if (!checkUser.checkUserId(userId, certUserId) || !checkUser.checkUserRole(certUserId)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			userService.deleteUser(userId);
+			
+			if (checkUser.checkUserRole(certUserId)) {
+				resp.sendRedirect("/ticket/user");
+				return;
+			}
+			
 			// 刪除完畢後，重新執行首頁
-			resp.sendRedirect("/ticket/user");
+			resp.sendRedirect("/ticket/index.html");
 			return;
 		} else if (pathInfo.equals("/get")) { //  取得 user 資料並導入到修改頁面
 			String userPhonenumber =req.getParameter("userPhonenumber");
@@ -76,10 +102,7 @@ public class UserServlet extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/view/update_password.jsp").forward(req, resp);
 			return;
 		} else if (pathInfo.equals("/order")) {
-			HttpSession session = req.getSession();
-			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
-			Integer userId = userCert.getUserId();
-			List<OrderDto> orderDtos = orderService.getUserOrders(userId);
+			List<OrderDto> orderDtos = orderService.getUserOrders(certUserId);
 			req.setAttribute("orderDtos", orderDtos);
 			req.getRequestDispatcher("/WEB-INF/view/user_order.jsp").forward(req, resp);
 			return;
@@ -94,6 +117,7 @@ public class UserServlet extends HttpServlet {
 			return;
 		}
 	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();

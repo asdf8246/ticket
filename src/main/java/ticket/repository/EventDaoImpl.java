@@ -1,5 +1,6 @@
 package ticket.repository;
 
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	@Override
 	public List<Events> findAllEvents() {
 		List<Events> events = new ArrayList<>();
-		String sql = "select event_id, event_name, event_date, venue, description from events";
+		String sql = "select * from events";
 		try (Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)) {
 			//逐筆尋訪
@@ -24,8 +25,12 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 				event.setEventId(rs.getInt("event_id"));
 				event.setEventName(rs.getString("event_name"));
 				event.setEventDate(rs.getString("event_date"));
+				event.setSellDate(rs.getString("sell_date"));
 				event.setVenue(rs.getString("venue"));
+				event.setAddress(rs.getString("address"));
 				event.setDescription(rs.getString("description"));
+				event.setEventStatus(rs.getString("event_status"));
+				event.setEventImage(rs.getBlob("event_image").getBinaryStream());
 				// 將 event 物件放到 events 集合中保存
 				events.add(event);
 			}
@@ -38,7 +43,7 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 
 	@Override
 	public Events getEvent(Integer eventId) {
-		String sql = "select event_id, event_name, event_date, venue, description from events where event_id=?";
+		String sql = "select * from events where event_id=?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, eventId);
 			
@@ -48,8 +53,12 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 					event.setEventId(rs.getInt("event_id"));
 					event.setEventName(rs.getString("event_name"));
 					event.setEventDate(rs.getString("event_date"));
+					event.setSellDate(rs.getString("sell_date"));
 					event.setVenue(rs.getString("venue"));
+					event.setAddress(rs.getString("address"));
 					event.setDescription(rs.getString("description"));
+					event.setEventStatus(rs.getString("event_status"));
+					event.setEventImage(rs.getBlob("event_image").getBinaryStream());
 					return event;
 				}
 			}
@@ -61,16 +70,19 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 
 	@Override
 	public Integer addEvent(Events event) {
-		String sql = "insert into events(event_name, event_date, venue, description) value(?, ?, ?, ?)";
+		String sql = "insert into events(event_name, event_date, sell_date, venue, address, description , event_image) value(?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, event.getEventName());
 			pstmt.setString(2, event.getEventDate());
-			pstmt.setString(3, event.getVenue());
-			pstmt.setString(4, event.getDescription());
+			pstmt.setString(3, event.getSellDate());
+			pstmt.setString(4, event.getVenue());
+			pstmt.setString(5, event.getAddress());
+			pstmt.setString(6, event.getDescription());
+			pstmt.setBlob(7, event.getEventImage());
 			
 			int rowcount = pstmt.executeUpdate();
 			if (rowcount != 1) {
-				throw new RuntimeException("新增失敗");
+				throw new RuntimeException("新增失敗!");
 			}
 			
 			try(ResultSet rs = pstmt.getGeneratedKeys()){
@@ -118,6 +130,22 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	}
 
 	@Override
+	public void updateSellDate(Integer eventId, String sellDate) {
+		String sql = "update events set sell_date = ? where event_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, sellDate);
+			pstmt.setInt(2, eventId);
+			
+			int rowcount = pstmt.executeUpdate();
+			if (rowcount != 1) {
+				throw new RuntimeException("修改失敗 Id:" + eventId + "name:" + sellDate);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public void updateVenue(Integer eventId, String venue) {
 		String sql = "update events set venue = ? where event_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -127,6 +155,22 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 			int rowcount = pstmt.executeUpdate();
 			if (rowcount != 1) {
 				throw new RuntimeException("修改失敗 Id:" + eventId + "name:" + venue);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void updateAddress(Integer eventId, String address) {
+		String sql = "update events set address = ? where event_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, address);
+			pstmt.setInt(2, eventId);
+			
+			int rowcount = pstmt.executeUpdate();
+			if (rowcount != 1) {
+				throw new RuntimeException("修改失敗 Id:" + eventId + "name:" + address);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -150,6 +194,22 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	}
 
 	@Override
+	public void updateEventImage(Integer eventId, InputStream eventImage) {
+		String sql = "update events set event_image = ? where event_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setBlob(1, eventImage);
+			pstmt.setInt(2, eventId);
+			
+			int rowcount = pstmt.executeUpdate();
+			if (rowcount != 1) {
+				throw new RuntimeException("修改失敗 Id:" + eventId + "name:" + eventImage);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
 	public void deleteEvent(Integer eventId) {
 		String sql = "delete from events where event_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -164,5 +224,5 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

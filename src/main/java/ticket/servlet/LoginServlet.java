@@ -19,6 +19,12 @@ public class LoginServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+		if (userCert != null) {
+			resp.sendRedirect("/ticket/index.html");
+			return;
+		}
 		// 重導到 login.jsp
 		req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
 	}
@@ -48,7 +54,7 @@ public class LoginServlet extends HttpServlet{
 		req.setAttribute("message", "登入成功");
 		// 檢查 session 中的 redirectURL 是否有資料
 		if (session.getAttribute("redirectURL")==null) {
-			req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
+			resp.sendRedirect("/ticket/index.html");
 		} else {
 			String redirectURL = session.getAttribute("redirectURL").toString();
 			resp.sendRedirect(redirectURL);

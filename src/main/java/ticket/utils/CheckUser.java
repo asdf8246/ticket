@@ -19,6 +19,14 @@ public class CheckUser {
 		}
 	}
 	
+	public boolean checkUserId(String userId, Integer certUserId) {
+		if (Integer.parseInt(userId) == certUserId) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean checkUserRole(Integer userId) {
 		UserService userService = new UserService();
 		UserDto userDto = userService.getUser(userId);

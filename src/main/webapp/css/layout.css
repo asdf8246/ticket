@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+.column-image {
+	min-width: 250px;
+    width: 50%;
+    height: 131px;
+}
+
+
+.columnImage {
+	max-width: 400px;
+	min-width: 200px;
+}
+
+.small-image{
+	width: 300px;
+	height: auto;
+}
+
+.large-image{
+	max-width: 940px;
+	height: auto;
+}
