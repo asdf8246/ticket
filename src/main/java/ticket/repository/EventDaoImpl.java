@@ -1,6 +1,7 @@
 package ticket.repository;
 
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,25 +17,26 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	public List<Events> findAllEvents() {
 		List<Events> events = new ArrayList<>();
 		String sql = "select * from events";
-		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
-			//逐筆尋訪
-			while (rs.next()) {
-				//建立 event 物件並將資料配置進去
-				Events event = new Events();
-				event.setEventId(rs.getInt("event_id"));
-				event.setEventName(rs.getString("event_name"));
-				event.setEventDate(rs.getString("event_date"));
-				event.setSellDate(rs.getString("sell_date"));
-				event.setVenue(rs.getString("venue"));
-				event.setAddress(rs.getString("address"));
-				event.setDescription(rs.getString("description"));
-				event.setEventStatus(rs.getString("event_status"));
-				event.setEventImage(rs.getBlob("event_image").getBinaryStream());
-				// 將 event 物件放到 events 集合中保存
-				events.add(event);
+		try(Connection connection = DatabaseConnectionPool.getConnection() ) {
+			try (Statement stmt = connection.createStatement();
+					ResultSet rs = stmt.executeQuery(sql)) {
+				//逐筆尋訪
+				while (rs.next()) {
+					//建立 event 物件並將資料配置進去
+					Events event = new Events();
+					event.setEventId(rs.getInt("event_id"));
+					event.setEventName(rs.getString("event_name"));
+					event.setEventDate(rs.getString("event_date"));
+					event.setSellDate(rs.getString("sell_date"));
+					event.setVenue(rs.getString("venue"));
+					event.setAddress(rs.getString("address"));
+					event.setDescription(rs.getString("description"));
+					event.setEventStatus(rs.getString("event_status"));
+					event.setEventImage(rs.getBlob("event_image").getBinaryStream());
+					// 將 event 物件放到 events 集合中保存
+					events.add(event);
+				}
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -50,6 +50,16 @@ public class OrderServlet extends HttpServlet{
 			String orderId = req.getParameter("orderId");
 			OrderDto orderDto = orderService.getOrder(orderId);
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
+			
+			if (orderDto == null) {
+				resp.setContentType("text/html;charset=UTF-8");
+	            resp.getWriter().write("<script type='text/javascript'>");
+	            resp.getWriter().write("alert('訂單已取消!');");
+	            resp.getWriter().write("window.location.href = '/ticket/user/order';"); // 重新導向回表單頁面
+	            resp.getWriter().write("</script>");
+		        return;
+			}
+			
 			req.setAttribute("orderDto", orderDto);
 			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);
@@ -138,7 +148,7 @@ public class OrderServlet extends HttpServlet{
 			if (seats.isEmpty()) {
 				orderService.deleteOrder(orderId.toString());
 				
-				 // 如果處理失敗，顯示錯誤訊息
+				// 如果處理失敗，顯示錯誤訊息
 	            resp.setContentType("text/html;charset=UTF-8");
 	            resp.getWriter().write("<script type='text/javascript'>");
 	            resp.getWriter().write("alert('票券已完售!');");
