@@ -1,12 +1,9 @@
 package ticket.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import com.google.gson.JsonObject;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -61,7 +58,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/delete")) {
 			String orderId = req.getParameter("orderId");
 			
-			if (!checkUser.checkOrderUser(orderId, userId) || !checkUser.checkUserRole(userId)) {
+			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId)) {
 				req.setAttribute("message", "執行錯誤操作!!!");
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
@@ -71,6 +68,12 @@ public class OrderServlet extends HttpServlet{
 			String seatStatus = "available";
 			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
 			orderService.deleteOrder(orderId);
+			
+			if (eventId == null) {
+				resp.sendRedirect("/ticket/user/order");
+				return;
+			}
+			
 			resp.sendRedirect("/ticket/event/view?eventId=" + eventId);
 			return;
 		}
@@ -94,7 +97,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/cancel")) {
 			String orderId = req.getParameter("orderId");
 			
-			if (!checkUser.checkOrderUser(orderId, userId) || !checkUser.checkUserRole(userId)) {
+			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId)) {
 				req.setAttribute("message", "執行錯誤操作!!!");
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
@@ -132,20 +135,15 @@ public class OrderServlet extends HttpServlet{
 			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
 			
-			if (seats == null) {
-				// 构建消息和跳转 URL
-		        String message = "票券已完售!";
-		        String redirectUrl = "/ticket/event/view?eventId=" + eventId;  // 替换为目标页面的 URL
-
-		        // 创建响应对象（将消息和跳转 URL 传递到前端）
-		        JsonObject jsonResponse = new JsonObject();
-		        jsonResponse.addProperty("message", message);
-		        jsonResponse.addProperty("redirectUrl", redirectUrl);
-
-		        // 输出 JSON 响应
-		        PrintWriter out = resp.getWriter();
-		        out.print(jsonResponse.toString());
-		        out.flush();
+			if (seats.isEmpty()) {
+				orderService.deleteOrder(orderId.toString());
+				
+				 // 如果處理失敗，顯示錯誤訊息
+	            resp.setContentType("text/html;charset=UTF-8");
+	            resp.getWriter().write("<script type='text/javascript'>");
+	            resp.getWriter().write("alert('票券已完售!');");
+	            resp.getWriter().write("window.location.href = '/ticket/event/view?eventId=" + eventId + "';"); // 重新導向回表單頁面
+	            resp.getWriter().write("</script>");
 		        return;
 			}
 			

@@ -19,12 +19,16 @@ public class LoginServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		// 取得 session
 		HttpSession session = req.getSession();
-		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
-		if (userCert != null) {
-			resp.sendRedirect("/ticket/index.html");
+				
+		// 判斷是否登入
+		if (session.getAttribute("userCert")!=null) {
+			resp.sendRedirect("/ticket/index.html"); // 重導回首頁
 			return;
 		}
+		
 		// 重導到 login.jsp
 		req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
 	}

@@ -81,6 +81,7 @@
 	      const form = document.getElementById('orderTicket');
 	      form.addEventListener('submit', checkInputs);
 	    };
+	   
 	 	</script>
 	</body>
 </html>

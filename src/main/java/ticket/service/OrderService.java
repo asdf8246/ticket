@@ -81,11 +81,11 @@ public class OrderService {
 		return orderDtos;
 	}
 	
-	public Integer addOrder(Integer userId, String eventId,  String eventName, String[] orderPrices, String[] numSeatss, String orderDate) {
+	public Integer addOrder(Integer userId, String eventId,  String eventName, String[] seatPrices, String[] numSeatss, String orderDate) {
 		Order order = new Order();
 		Integer orderPrice = 0;
-		for(int i=0;i<orderPrices.length;i++) {
-			Integer price = Integer.parseInt(orderPrices[i]);
+		for(int i=0;i<seatPrices.length;i++) {
+			Integer price = Integer.parseInt(seatPrices[i]);
 			Integer numSeats = Integer.parseInt(numSeatss[i]);
 			
 			orderPrice = (price * numSeats) + orderPrice;

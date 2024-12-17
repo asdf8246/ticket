@@ -37,6 +37,9 @@
                         		<c:if test="${ orderDtos.orderStatus == 'paid' }">
 									<a href="/ticket/order/cancel?orderId=${ orderDtos.orderId }" id="deleteOrder"  onclick="return confirmDelete('${ orderDtos.orderId }');" class="button-error pure-button">取消訂單</a>
 								</c:if>
+								<c:if test="${ orderDtos.orderStatus == 'pending' }">
+									<a href="/ticket/order/delete?orderId=${ orderDtos.orderId }" class="button-error pure-button">取消訂單</a>
+								</c:if>
 							</td>
 						</tr>
 					</c:forEach>
