@@ -76,7 +76,7 @@
 						</table>
 					</fieldset>
 				</div>
-				<button type="submit" class="button-secondary pure-button" >Update</button>
+				<button type="submit" class="button-secondary pure-button" >修改</button>
 			</form>
 		</div>
 		

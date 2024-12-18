@@ -19,9 +19,10 @@ public class LoginServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		// 取得 session
 		HttpSession session = req.getSession();
+		
+
 				
 		// 判斷是否登入
 		if (session.getAttribute("userCert")!=null) {
@@ -37,9 +38,20 @@ public class LoginServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String phonenumber = req.getParameter("phonenumber");
 		String password = req.getParameter("password");
-		
+		String captcha = req.getParameter("captcha");
 		//驗證帳密取得憑證
 		UserCert userCert = null;
+		
+        // 從 session 中獲取生成的 CAPTCHA
+        String captchaInSession = (String)req.getSession().getAttribute("captcha");
+		
+        if (captcha == null || !captcha.equalsIgnoreCase(captchaInSession)) {
+        	// CAPTCHA 驗證失敗，提示錯誤
+            req.setAttribute("error", "驗證碼錯誤!");
+            req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
+            return;
+		}
+        
 		
 		try {
 			userCert = certService.gerCert(phonenumber, password);

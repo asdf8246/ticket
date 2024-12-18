@@ -13,7 +13,11 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<link rel="stylesheet" href="/ticket/css/layout.css">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		
+		 <style>
+
+	    </style>
 	</head>
 	<body>
 		<!-- menu bar include -->
@@ -32,7 +36,7 @@
 		<input type="hidden" name="eventName" value="${eventDto.eventName}">
 		<div class="pure-form" style="padding: 15px;">
 			<h3>活動票券</h3>
-			<fieldset>
+			<fieldset class="order">
 				<table class="pure-table pure-table-bordered">
 					<thead>
 						<tr>
@@ -54,6 +58,8 @@
 		</div>
 		</form>
 		
+		
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 		<script>
 	    // 當表單提交時檢查 input 是否都為 0
 	    function checkInputs(event) {

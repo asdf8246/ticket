@@ -16,6 +16,15 @@
 		<link rel="stylesheet" href="/ticket/css/layout.css">
 		
 		<script src="https://cdn.jsdelivr.net/npm/date-fns@4.1.0/cdn.min.js"></script>
+		
+		<style>
+			html, body {
+			    display: grid;
+			    justify-content: center;  /* 水平居中 */
+			    height: 100vh;            /* 使body高度充滿整個視窗 */
+			    margin: 0;                /* 移除默認的邊距 */
+			}
+		</style>
 	</head>
 	<body>
 		<!-- menu bar include -->

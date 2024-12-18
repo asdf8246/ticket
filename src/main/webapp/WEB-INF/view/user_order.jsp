@@ -10,6 +10,7 @@
 		<title>User Order</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 	</head>
 	<body>
 	<!-- menu bar include -->
@@ -21,7 +22,7 @@
 				<table class="pure-table pure-table-bordered">
 					<thead>
 						<tr>
-							<th>活動名稱</th><th>票券總價</th><th>建立日期</th><th>訂單狀態</th>
+							<th>活動名稱</th><th>票券總價</th><th>建立日期</th><th>訂單狀態</th><th></th>
 						</tr>
 					</thead>
 					<c:forEach var="orderDtos" items="${ orderDtos }">

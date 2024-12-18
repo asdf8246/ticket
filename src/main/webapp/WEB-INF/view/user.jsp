@@ -11,6 +11,7 @@
 		<title>User</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 	</head>
 	<body>
 		<!-- menu bar include -->

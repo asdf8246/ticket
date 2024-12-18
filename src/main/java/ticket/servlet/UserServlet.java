@@ -55,10 +55,11 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 		Integer certUserId = userCert.getUserId();
+		String certUserRole = userCert.getRole();
 		
 		if (pathInfo == null || pathInfo.equals("/*")) {
 			
-			if (!checkUser.checkUserRole(certUserId)) {
+			if (!checkUser.checkUserRole(certUserId, certUserRole)) {
 				resp.sendRedirect("/ticket/index.html");
 				return;
 			}
@@ -74,7 +75,7 @@ public class UserServlet extends HttpServlet {
 		} else if (pathInfo.equals("/delete")) {
 			String userId = req.getParameter("userId");
 			
-			if (!checkUser.checkUserId(userId, certUserId) || !checkUser.checkUserRole(certUserId)) {
+			if (!checkUser.checkUserId(userId, certUserId) && !checkUser.checkUserRole(certUserId,certUserRole)) {
 				req.setAttribute("message", "執行錯誤操作!!!");
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
@@ -82,7 +83,7 @@ public class UserServlet extends HttpServlet {
 			
 			userService.deleteUser(userId);
 			
-			if (checkUser.checkUserRole(certUserId)) {
+			if (checkUser.checkUserRole(certUserId, certUserRole)) {
 				resp.sendRedirect("/ticket/user");
 				return;
 			}
@@ -115,6 +116,10 @@ public class UserServlet extends HttpServlet {
 			req.setAttribute("orderDto", orderDto);
 			req.getRequestDispatcher("/WEB-INF/view/user_order_view.jsp").forward(req, resp);
 			return;
+		}else if (pathInfo.equals("/view")) {
+			UserDto userDto = userService.getUser(certUserId);
+			req.setAttribute("userDto", userDto);
+			req.getRequestDispatcher("/WEB-INF/view/user_view.jsp").forward(req, resp);
 		}
 	}
 	

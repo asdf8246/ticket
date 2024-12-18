@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+html, body {
+	display: grid;
+	justify-content: center;  /* 水平居中 */
+	height: 100vh;            /* 使body高度充滿整個視窗 */
+	margin: 0;                /* 移除默認的邊距 */
+	text-align: center; /* 讓文本也居中 */
+}
+
 .column-image {
 	min-width: 250px;
     width: 50%;

@@ -27,10 +27,7 @@ public class CheckUser {
 		}
 	}
 	
-	public boolean checkUserRole(Integer userId) {
-		UserService userService = new UserService();
-		UserDto userDto = userService.getUser(userId);
-		String userRole = userDto.getUserRole();
+	public boolean checkUserRole(Integer userId , String userRole) {
 		if (userRole.equals("ROLE_ADMIN")) {
 			return true;
 		} else {

@@ -8,7 +8,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Event</title>
+		<title>活動</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<link rel="stylesheet" href="/ticket/css/layout.css">
@@ -19,7 +19,7 @@
 		
 		<div class="pure-form" style="padding: 15px;">
 				<fieldset>
-					<legend>Event 列表</legend>
+					<legend>活動列表</legend>
 					<table class="pure-table pure-table-bordered">
 						<thead>
 							<tr>

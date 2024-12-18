@@ -36,7 +36,7 @@ public class OrderServlet extends HttpServlet{
 		HttpSession session = req.getSession();
 		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 		Integer userId = userCert.getUserId();
-		
+		String userRole = userCert.getRole();
 		if (pathInfo.equals("/buy")) {
 			String eventId = req.getParameter("eventId");
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
@@ -60,6 +60,12 @@ public class OrderServlet extends HttpServlet{
 		        return;
 			}
 			
+			if (!checkUser.checkOrderUser(orderId, userId)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			req.setAttribute("orderDto", orderDto);
 			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);
@@ -68,7 +74,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/delete")) {
 			String orderId = req.getParameter("orderId");
 			
-			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId)) {
+			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId, userRole)) {
 				req.setAttribute("message", "執行錯誤操作!!!");
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
@@ -107,7 +113,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/cancel")) {
 			String orderId = req.getParameter("orderId");
 			
-			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId)) {
+			if (!checkUser.checkOrderUser(orderId, userId) && !checkUser.checkUserRole(userId, userRole)) {
 				req.setAttribute("message", "執行錯誤操作!!!");
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
