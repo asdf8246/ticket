@@ -1,13 +1,63 @@
 @charset "UTF-8";
 
+/*網頁排版*/
 html, body {
-	display: grid;
-	justify-content: center;  /* 水平居中 */
-	height: 100vh;            /* 使body高度充滿整個視窗 */
-	margin: 0;                /* 移除默認的邊距 */
-	text-align: center; /* 讓文本也居中 */
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;      /* 水平居中 */
+    background-color: #c5c5c5;
+    text-align: center; /* 讓文本也居中 */
+}
+/* 表單樣式 */
+.pure-form {
+    width: 100%;        /* 讓表單寬度為100% */
+    max-width: 940px;
+    padding: 20px;
+    background-color: white;
+    box-sizing: border-box;
+}
+/* 表格樣式 */
+.pure-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.pure-table-bordered {
+    border: 1px solid #ccc;
+}
+td, th {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
 }
 
+/*用戶相關*/
+.profile{
+    width: 400px;
+    height: 80vh;            /* 使 body 高度充滿整個視窗 */
+    margin: 0;                /* 移除 body 的默認邊距 */
+}
+.profile-form {
+    margin-top: 50%; /* 上方的 margin */
+    margin-bottom: 50%; /* 下方的 margin */
+    width: 100%;        /* 讓表單寬度為100% */
+    max-width: 600px;
+    padding: 20px;
+    background-color: white;
+    box-sizing: border-box;
+    border-radius: 8px;        /* 可選：圓角邊框 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 可選：陰影 */
+}
+.buttons-container {
+    display: flex;
+    justify-content: space-between; /* 在父容器中将按钮分别对齐到左右 */
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+/*圖片設定*/
 .column-image {
 	min-width: 250px;
     width: 50%;

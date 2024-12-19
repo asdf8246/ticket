@@ -19,8 +19,8 @@
 	<!-- menu bar include -->
 	<%@include file="/WEB-INF/view/menu.jspf" %>
 	
-		<div style="padding: 15px;">
-			<form class="pure-form" method="post" action="/ticket/user/update">
+		<div style="padding: 15px;" class="profile">
+			<form class="pure-form profile-form" method="post" action="/ticket/user/update">
 				<fieldset>
 					<legend>會員資料修改</legend>
 					帳號: <input type="text" name="username" value="${ userDto.username }" required /><p />

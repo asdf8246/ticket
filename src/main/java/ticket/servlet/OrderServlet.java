@@ -65,7 +65,9 @@ public class OrderServlet extends HttpServlet{
 				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
 				return;
 			}
-			
+			String eventId = orderDto.getEventId().toString();
+			EventDto eventDto = eventService.getEvent(eventId);
+			req.setAttribute("eventDto", eventDto);
 			req.setAttribute("orderDto", orderDto);
 			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_pay.jsp").forward(req, resp);

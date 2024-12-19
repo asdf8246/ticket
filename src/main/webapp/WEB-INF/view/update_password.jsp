@@ -11,33 +11,17 @@
 		<title>修改密碼</title>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 		
 		<style>
-			.updatePassword{
-				 display: flex;
-				 justify-content: center;  /* 水平居中 */
-				 align-items: center;      /* 垂直居中 */
-				 height: 80vh;            /* 使 body 高度充滿整個視窗 */
-				 margin: 0;                /* 移除 body 的默認邊距 */
-			}
-			form {
-			    background-color: #f1e5e5dc;  /* 可選：背景顏色 */
-			    padding: 20px;             /* 可選：內邊距 */
-			    border-radius: 8px;        /* 可選：圓角邊框 */
-			    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 可選：陰影 */
-			}
-			.buttons-container {
-				display: flex;
-				justify-content: space-between; /* 在父容器中将按钮分别对齐到左右 */
-			}
 		</style>
 	</head>
 	<body>
 	<!-- menu bar include -->
 	<%@include file="/WEB-INF/view/menu.jspf" %>
 	
-		<div style="padding: 15px" class="updatePassword">
-			<form class="pure-form" method="post" action="/ticket/user/update/password">
+		<div style="padding: 15px" class="profile">
+			<form class="pure-form profile-form" method="post" action="/ticket/user/update/password">
 				<fieldset>
 					<legend>修改密碼</legend>
 					手機: ${ userCert.userPhonenumber } <p /> 
