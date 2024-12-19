@@ -34,13 +34,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#sec3">Q&A</a>
+                        <a class="nav-link" href="/ticket/user/order">歷史訂單</a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#sec4">Contact</a>
-                    </li>
-
                 </ul>
 
                 <form class="d-flex">
@@ -51,7 +46,31 @@
         </div>
     </nav>
     
-	
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="margin-top: 56px;">
+	  <div class="carousel-indicators">
+	    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+	    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+	    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+	  </div>
+	  <div class="carousel-inner">
+		  <c:forEach var="eventId" items="${randomEventIds}">
+		  	<div class="carousel-item active">
+		    	<a href="<c:url value='/event/view?eventId=${eventId}' />">
+		        	<img src="<c:url value='/image?id=${eventId}&timestamp=${System.currentTimeMillis()}' />" class="large-image" alt="Event Image" />
+		    	</a>
+		    </div>
+		  </c:forEach>
+	  </div>
+	  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    <span class="visually-hidden">Previous</span>
+	  </button>
+	  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	    <span class="visually-hidden">Next</span>
+	  </button>
+	</div>
+		
 	
     <!-- 至JSDeliver網站搜Bootstrap5取得 -->	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>

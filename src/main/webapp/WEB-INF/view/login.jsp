@@ -21,9 +21,9 @@
 					<c:if test="${not empty error}">
 						<p style="color:red">${error}</p>
 					</c:if>
-					手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" autofocus required /><p />
-					密碼: <input type="password" name="password" placeholder="請輸入密碼" required /><p />
-					輸入驗證碼: <img src="<c:url value='/captcha?timestamp=${System.currentTimeMillis()}' />" alt="Captcha Image"><p />
+					<p>手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" autofocus required /><p />
+					<p>密碼: <input type="password" name="password" placeholder="請輸入密碼" required /><p />
+					<p>輸入驗證碼: <img src="<c:url value='/captcha?timestamp=${System.currentTimeMillis()}' />" alt="Captcha Image"><p />
 					<input type="text" id="captcha" name="captcha" style="margin-left: 43px;" required>
 					<div class="buttons-container">
 						<a href="/ticket/register" class="pure-button">註冊</a>

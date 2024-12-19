@@ -35,7 +35,7 @@ td, th {
 
 /*用戶相關*/
 .profile{
-    width: 400px;
+    width: 350px;
     height: 80vh;            /* 使 body 高度充滿整個視窗 */
     margin: 0;                /* 移除 body 的默認邊距 */
 }
@@ -53,8 +53,8 @@ td, th {
 .buttons-container {
     display: flex;
     justify-content: space-between; /* 在父容器中将按钮分别对齐到左右 */
-    margin-right: 20px;
-    margin-left: 20px;
+    margin-right: 25px;
+    margin-left: 25px;
 }
 
 /*圖片設定*/
