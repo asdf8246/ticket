@@ -6,6 +6,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>登入</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<link rel="stylesheet" href="/ticket/css/layout.css">
@@ -14,6 +15,9 @@
 		</style>
 	</head>
 	<body style="padding: 15px">
+	<!-- menu bar include -->
+	<%@include file="/WEB-INF/view/menu.jspf" %>
+
 		<div class="profile">
 			<form class="pure-form profile-form" method="post" action="/ticket/login">
 				<fieldset>
