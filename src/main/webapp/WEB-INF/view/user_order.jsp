@@ -8,6 +8,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>歷史訂單</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<link rel="stylesheet" href="/ticket/css/layout.css">
@@ -36,12 +37,12 @@
 							<td>${ orderDtos.orderStatus }</td>
 							<td>
 								<c:if test="${ orderDtos.orderStatus == 'pending' }">
-									<a href="/ticket/order/pay?orderId=${ orderDtos.orderId }" class="button-secondary pure-button">前往付費</a><p />
+									<a href="/ticket/order/pay?orderId=${ orderDtos.orderId }" class="button-secondary pure-button">前往付費</a><br>
 								</c:if>
 								<c:if test="${ orderDtos.orderStatus != 'pending' }">
-									<a href="/ticket/user/order/view?orderId=${ orderDtos.orderId }" class="button-secondary pure-button">查看訂單</a><p />
+									<a href="/ticket/user/order/view?orderId=${ orderDtos.orderId }" class="button-secondary pure-button">查看訂單</a><br>
 								</c:if>
-								<a href="/ticket/event/view?eventId=${ orderDtos.eventId }" class="button-success pure-button">活動頁面</a><p />
+									<a href="/ticket/event/view?eventId=${ orderDtos.eventId }" class="button-success pure-button">活動頁面</a><br>
 								<!-- 根據 orderStatus 判斷是否顯示刪除訂單按鈕 -->
                         		<c:if test="${ orderDtos.orderStatus == 'paid' }">
 									<a href="#" id="cancelOrder" onclick="return confirmCancel('${ orderDtos.orderId }', '${ orderDtos.orderDate }');" class="button-error pure-button">前往退票</a>
@@ -55,6 +56,8 @@
 				</table>
 			</fieldset>
 		</div>
+		
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/ticket/js/user.js"></script>
 	</body>
 </html>

@@ -21,26 +21,29 @@ public class LoginServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 取得 session
 		HttpSession session = req.getSession();
-		
-
 				
 		// 判斷是否登入
 		if (session.getAttribute("userCert")!=null) {
-			resp.sendRedirect("/ticket/index.html"); // 重導回首頁
+			resp.sendRedirect("/ticket/home"); // 重導回首頁
 			return;
 		}
 		
+		Integer login = 0;
+		req.setAttribute("login", login);
 		// 重導到 login.jsp
 		req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String phonenumber = req.getParameter("phonenumber");
+		String account = req.getParameter("account");
 		String password = req.getParameter("password");
 		String captcha = req.getParameter("captcha");
 		//驗證帳密取得憑證
 		UserCert userCert = null;
+		
+		Integer login = 0;
+		req.setAttribute("login", login);
 		
         // 從 session 中獲取生成的 CAPTCHA
         String captchaInSession = (String)req.getSession().getAttribute("captcha");
@@ -54,11 +57,10 @@ public class LoginServlet extends HttpServlet{
         
 		
 		try {
-			userCert = certService.gerCert(phonenumber, password);
+			userCert = certService.gerCert(account, password);
 		} catch (CertException e) {
-			// 將錯誤丟給(重導) error.jsp
-			req.setAttribute("message", e.getMessage());
-			req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+			req.setAttribute("error", e.getMessage());
+	        req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
 			return;
 		}
 		
@@ -70,7 +72,7 @@ public class LoginServlet extends HttpServlet{
 		req.setAttribute("message", "登入成功");
 		// 檢查 session 中的 redirectURL 是否有資料
 		if (session.getAttribute("redirectURL")==null) {
-			resp.sendRedirect("/ticket/index.html");
+			resp.sendRedirect("/ticket/home");
 		} else {
 			String redirectURL = session.getAttribute("redirectURL").toString();
 			resp.sendRedirect(redirectURL);

@@ -9,6 +9,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>User</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
 		<link rel="stylesheet" href="/ticket/css/layout.css">
@@ -21,19 +22,18 @@
 			<form class="pure-form" method="post" action="/ticket/user/add">
 				<fieldset>
 					<legend>User 新增</legend>
-					姓名: <input type="text" name="username" placeholder="請輸入姓名" required /><p />
-					手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" required><p /> 
-					密碼: <input type="text" name="password" placeholder="請輸入 password" required /><p /> 
-					電郵: <input type="email" name="email" placeholder="請輸入 email" required /><p />
-					權限: <select name="role">
+					<p>姓名: <input type="text" name="username" placeholder="請輸入姓名" required /></p>
+					<p>手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" required></p> 
+					<p>密碼: <input type="text" name="password" placeholder="請輸入 password" required /></p> 
+					<p>電郵: <input type="email" name="email" placeholder="請輸入 email" required /></p>
+					<p>權限: <select name="role">
 							<option value="ROLE_ADMIN">ADMIN</option>
 							<option value="ROLE_USER">USER</option>
-						  </select><p />
+						  </select></p>
 					<button type="reset" class="button-warning pure-button">Reset</button>
 					<button type="submit" class="button-success pure-button">Submit</button>	  
 				</fieldset>
 			</form>
-			<p />
 			<div class="pure-form">
 				<fieldset>
 					<legend>User 列表</legend>
@@ -59,5 +59,6 @@
 				</fieldset>
 			</div>
 		</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 	</body>
 </html>

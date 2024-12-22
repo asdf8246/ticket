@@ -11,4 +11,6 @@ public interface SeatsDao {
 	
 	//同時更新多筆座位的指定狀態
 	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus);
+	
+	public Integer getSoldSeatsNums(Integer seatCategoryId);
 }

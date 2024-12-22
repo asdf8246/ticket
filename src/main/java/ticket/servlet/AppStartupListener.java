@@ -5,6 +5,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import ticket.task.OrderCleanupTask;
+import ticket.task.UpdateEventStatusTask;
 
 
 @WebListener
@@ -20,11 +21,13 @@ public class AppStartupListener implements ServletContextListener {
         
         // 啟動定時任務
         OrderCleanupTask.startTask();
+        UpdateEventStatusTask.startTask();
 	}
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		// 停止定時任務
         OrderCleanupTask.stopTask();
+        UpdateEventStatusTask.stopTask();
 	}
 }

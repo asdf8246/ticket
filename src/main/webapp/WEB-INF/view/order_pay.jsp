@@ -21,7 +21,7 @@
 	</head>
 	<body>
 		<!-- menu bar include -->
-		<%@include file="/WEB-INF/view/event_menu.jspf" %>
+		<%@include file="/WEB-INF/view/menu.jspf" %>
 		
 		<div class="pure-form" style="padding: 15px;">
 			<h2>${ orderDto.eventName }</h2>
@@ -63,7 +63,7 @@
 		</div>
 		<div class="pure-form" style="padding: 15px;">
 			票價合計: <f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" /><p />
-			<a href="/ticket/order/delete?orderId=${ orderDto.orderId }&eventId=${ orderDto.eventId }" class="button-error pure-button">取消</a>
+			<a href="/ticket/order/delete?orderId=${ orderDto.orderId }&eventId=${ orderDto.eventId }" onclick="return confirmDelete('${ orderDto.orderId }','${ orderDto.eventId }');" class="button-error pure-button">取消</a>
 			<a href="/ticket/order/finish?orderId=${ orderDto.orderId }" class="button-secondary pure-button">付款</a>
 		</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -109,6 +109,33 @@
 
 	 // 使用 setInterval，每秒钟调用 calcTime
 	let timerId = setInterval(calcTime, 1000);
+
+	// 確認刪除操作的函數
+	function confirmDelete(orderId,eventId) {
+		// 顯示確認對話框
+		const confirmation = confirm("確定要取消訂單嗎？取消後將不會保留座位。");
+
+		if (confirmation) {
+			// 使用 AJAX 發送刪除請求
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", '/ticket/order/delete?orderId=' + orderId, true);
+			
+			// 當請求完成後的回調函數
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					alert("訂單已取消");
+					// 這裡會觸發跳轉到原來的鏈接
+					window.location.href = '/ticket/event/view?eventId=' + eventId;
+				} else {
+					alert("取消訂單失敗！");
+				}
+			};
+			xhr.send();  // 發送請求
+		}
+
+		// 如果用戶選擇「取消」，則返回 false，阻止鏈接的默認行為（避免跳轉）
+		return false;
+	}
 	</script>
 	</body>
 </html>

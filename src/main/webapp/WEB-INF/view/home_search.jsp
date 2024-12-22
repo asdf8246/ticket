@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>首頁</title>
+		<title>搜尋</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
@@ -126,14 +126,14 @@
     </header>
 	
 	<div class="row">
-		<c:forEach var="homeEventDtos" items="${homeEventDtos}">
+		<c:forEach var="searchEventDtos" items="${searchEventDtos}">
             <div class="col-lg-3 p-3 card">
-                <a href="<c:url value='/event/view?eventId=${homeEventDtos.eventId}' />" class="text-decoration-none">
+                <a href="<c:url value='/event/view?eventId=${searchEventDtos.eventId}' />" class="text-decoration-none">
                     <div class="border rounded h-100">
-                        <img src="<c:url value='/image?id=${homeEventDtos.eventId}&timestamp=${System.currentTimeMillis()}' />" class="home-image" alt="Event Image" />
+                        <img src="<c:url value='/image?id=${searchEventDtos.eventId}&timestamp=${System.currentTimeMillis()}' />" class="home-image" alt="Event Image" />
                         <div class="card-body">
-                            <h5 class="card-title fw-bold link-dark">${homeEventDtos.eventName}</h5>
-                            <p class="card-text"><small class="text-muted"><span id="countdown-${homeEventDtos.eventId}"></span></small></p>
+                            <h5 class="card-title fw-bold link-dark">${searchEventDtos.eventName}</h5>
+                            <p class="card-text"><small class="text-muted"><span id="countdown-${searchEventDtos.eventId}"></span></small></p>
                         </div>
                     </div>
                 </a>
@@ -141,24 +141,31 @@
             <!-- 為每個活動生成倒數計時腳本 -->
 		    <script>
 		        // 從後端獲取的時間字符串，將每個活動的 sellDate 傳遞給 JavaScript
-		        const sellDate_${homeEventDtos.eventId} = "${homeEventDtos.sellDate}";  // 使用每個活動的 sellDate，並給變數加上事件ID後綴
+		        const sellDate_${searchEventDtos.eventId} = "${searchEventDtos.sellDate}";  // 使用每個活動的 sellDate，並給變數加上事件ID後綴
 		
 		        // 使用 date-fns 解析日期字符串，並轉換為 JavaScript Date 對象
-		        const endTime_${homeEventDtos.eventId} = dateFns.parse(sellDate_${homeEventDtos.eventId}, 'yyyy-MM-dd HH:mm:ss', new Date());
+		        const endTime_${searchEventDtos.eventId} = dateFns.parse(sellDate_${searchEventDtos.eventId}, 'yyyy-MM-dd HH:mm:ss', new Date());
 		
 		        // 取得毫秒數
-		        let endtimems_${homeEventDtos.eventId} = endTime_${homeEventDtos.eventId}.getTime(); 
-				
+		        let endtimems_${searchEventDtos.eventId} = endTime_${searchEventDtos.eventId}.getTime();  
+
 		        // 倒數計時函數
-		        function calcTime_${homeEventDtos.eventId}(eventId) {
+		        function calcTime_${searchEventDtos.eventId}(eventId) {
 		            let now = new Date();
 		            let nowms = now.getTime();
-		            let offsetTime = (endtimems_${homeEventDtos.eventId} - nowms) / 1000;
+		            let offsetTime = (endtimems_${searchEventDtos.eventId} - nowms) / 1000;
 					
+					if ('${searchEventDtos.eventStatus}' == '已結束'){
+						let timeup = '已過活動時間!';
+		                document.querySelector(`#countdown-${searchEventDtos.eventId}`).innerHTML = timeup;
+		                clearInterval(timerId_${searchEventDtos.eventId}); // 停止倒數計時
+		                return;
+					}
+
 		            if (offsetTime <= 0) {
 		                let timeup = '票券已開賣!';
-		                document.querySelector(`#countdown-${homeEventDtos.eventId}`).innerHTML = timeup;
-		                clearInterval(timerId_${homeEventDtos.eventId}); // 停止倒數計時
+		                document.querySelector(`#countdown-${searchEventDtos.eventId}`).innerHTML = timeup;
+		                clearInterval(timerId_${searchEventDtos.eventId}); // 停止倒數計時
 		                return;
 		            }
 		
@@ -166,7 +173,7 @@
 		            let min = Math.floor(offsetTime / 60 % 60);    //分
 		            let hr = Math.floor(offsetTime / 60 / 60 % 24); //時
 		            let day = Math.floor(offsetTime / 60 / 60 / 24); //天
-
+		
 		            let result = null;
 		            if (day>0) {
 		            	result = '距離開賣剩餘 ' + day + ' 天';
@@ -177,17 +184,17 @@
 					}
 		            
 		            
-		            document.querySelector(`#countdown-${homeEventDtos.eventId}`).innerHTML = result;
+		            document.querySelector(`#countdown-${searchEventDtos.eventId}`).innerHTML = result;
 		        }
 		        
-		        let timerId_${homeEventDtos.eventId};
+		        let timerId_${searchEventDtos.eventId};
 		        
 		     	// 立即顯示倒數時間
-		        calcTime_${homeEventDtos.eventId}(${homeEventDtos.eventId});
+		        calcTime_${searchEventDtos.eventId}(${searchEventDtos.eventId});
 		        
 		        // 為每個活動設置定時器，使用活動的 ID
-		        timerId_${homeEventDtos.eventId} = setInterval(function() {
-		            calcTime_${homeEventDtos.eventId}(${homeEventDtos.eventId});
+		        timerId_${searchEventDtos.eventId} = setInterval(function() {
+		            calcTime_${searchEventDtos.eventId}(${searchEventDtos.eventId});
 		        }, 60000);
 		    </script>
 		</c:forEach>

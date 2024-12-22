@@ -28,4 +28,6 @@ public interface OrderDao {
 	
 	// 刪除
 	void deleteOrder(Integer orderId);
+	
+	Order checkUserOrderStatus(Integer userId,Integer eventId);
 }

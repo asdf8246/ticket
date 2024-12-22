@@ -8,18 +8,31 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>${ orderDto.eventName } 訂單</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
 		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 	</head>
 	<body>
 	<!-- menu bar include -->
 	<%@include file="/WEB-INF/view/menu.jspf" %>
 	
-	<div class="pure-form" style="padding: 15px;">
+	<div class="pure-form">
 		<h2>${ orderDto.eventName }</h2>
-		訂單成立: ${ orderDto.orderDate }<p />
+		<p>
+			<a class="" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+			顯示活動詳細資料
+			</a>
+		</p>
+		<div class="collapse" id="collapseExample">
+			<div class="">
+			<p>活動日期: ${ eventDto.eventDate }</p>
+			<p>活動地點: ${ eventDto.venue } / ${ eventDto.address }</p>
+			</div>
+		</div>
+		<p>訂單成立: ${ orderDto.orderDate }</p>
 	</div>
-	<div class="pure-form" style="padding: 15px;">
+	<div class="pure-form">
 		<fieldset>
 			<legend>訂單內容</legend>
 			<table class="pure-table pure-table-bordered">
@@ -41,5 +54,7 @@
 		</fieldset>
 		票價合計: <f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" />
 	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 	</body>
 </html>

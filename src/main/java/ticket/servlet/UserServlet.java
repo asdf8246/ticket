@@ -9,9 +9,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ticket.model.dto.EventDto;
 import ticket.model.dto.OrderDto;
 import ticket.model.dto.UserCert;
 import ticket.model.dto.UserDto;
+import ticket.service.EventService;
 import ticket.service.OrderService;
 import ticket.service.UserService;
 import ticket.utils.CheckUser;
@@ -46,6 +48,7 @@ public class UserServlet extends HttpServlet {
 	private UserService userService = new UserService();
 	private OrderService orderService = new OrderService();
 	private CheckUser checkUser = new CheckUser();
+	private EventService eventService = new EventService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,11 +59,22 @@ public class UserServlet extends HttpServlet {
 		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 		Integer certUserId = userCert.getUserId();
 		String certUserRole = userCert.getRole();
+
+		Integer login = 0;
+		String userName = null;
+		// 判斷是否登入
+		if (session.getAttribute("userCert")!=null) {
+			login = 1;
+			userName = userService.getUser(userCert.getUserId()).getUsername();
+			req.setAttribute("userName", userName);
+			req.setAttribute("userRole", certUserRole);
+		}
+		req.setAttribute("login", login);
 		
 		if (pathInfo == null || pathInfo.equals("/*")) {
 			
 			if (!checkUser.checkUserRole(certUserId, certUserRole)) {
-				resp.sendRedirect("/ticket/index.html");
+				resp.sendRedirect("/ticket/home");
 				return;
 			}
 			
@@ -89,7 +103,9 @@ public class UserServlet extends HttpServlet {
 			}
 			
 			// 刪除完畢後，重新執行首頁
-			resp.sendRedirect("/ticket/index.html");
+			// 將 session 失效
+			session.invalidate();
+			resp.sendRedirect("/ticket/home");
 			return;
 		} else if (pathInfo.equals("/get")) { //  取得 user 資料並導入到修改頁面
 			String userPhonenumber =req.getParameter("userPhonenumber");
@@ -107,19 +123,31 @@ public class UserServlet extends HttpServlet {
 			req.setAttribute("orderDtos", orderDtos);
 			req.getRequestDispatcher("/WEB-INF/view/user_order.jsp").forward(req, resp);
 			return;
-		}
-		else if (pathInfo.equals("/order/view")) {
+		} else if (pathInfo.equals("/order/view")) {
 			String orderId = req.getParameter("orderId");
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			OrderDto orderDto = orderService.getOrder(orderId);
+			
+			Integer eventId = orderDto.getEventId();
+			EventDto eventDto = eventService.getEvent(eventId.toString());
+			
 			req.setAttribute("orderSeatsDto", orderSeatsDto);
 			req.setAttribute("orderDto", orderDto);
+			req.setAttribute("eventDto", eventDto);
 			req.getRequestDispatcher("/WEB-INF/view/user_order_view.jsp").forward(req, resp);
 			return;
-		}else if (pathInfo.equals("/view")) {
+		} else if (pathInfo.equals("/view")) {
 			UserDto userDto = userService.getUser(certUserId);
 			req.setAttribute("userDto", userDto);
 			req.getRequestDispatcher("/WEB-INF/view/user_view.jsp").forward(req, resp);
+			return;
+		} else if (pathInfo.equals("/update")) { //  取得 user 資料並導入到修改頁面
+			UserDto userDto = userService.getUser(certUserId);
+			// 將必要資料加入到 requset 屬性中以便交由 jsp 進行分析與呈現
+			req.setAttribute("userDto", userDto);
+			// 重導到 user_update.jsp
+			req.getRequestDispatcher("/WEB-INF/view/user_update.jsp").forward(req, resp);
+			return;
 		}
 	}
 	
@@ -146,13 +174,26 @@ public class UserServlet extends HttpServlet {
 			// 修改密碼要在已登入的環境下
 			HttpSession session = req.getSession();
 			UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
+			Integer login = 0;
+			String userName = null;
+			String userRole = null;
+			// 判斷是否登入
+			if (session.getAttribute("userCert")!=null) {
+				login = 1;
+				userName = userService.getUser(userCert.getUserId()).getUsername();
+				userRole = userCert.getRole();
+				req.setAttribute("userName", userName);
+				req.setAttribute("userRole", userRole);
+			}
+			req.setAttribute("login", login);
+			
 			try {
 				userService.updatePassword(userCert.getUserId(), userCert.getUserPhonenumber(), oldPassword, newPassword);
 				req.setAttribute("message", "密碼更新成功");
 				req.getRequestDispatcher("/WEB-INF/view/result.jsp").forward(req, resp);
 			} catch (Exception e) {
-				req.setAttribute("message", e.getMessage());
-				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				 req.setAttribute("error", "密碼錯誤!");
+		         req.getRequestDispatcher("/WEB-INF/view/update_password.jsp").forward(req, resp);
 			}
 			return;
 		}

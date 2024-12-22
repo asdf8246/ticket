@@ -22,7 +22,7 @@
 	</head>
 	<body>
 		<!-- menu bar include -->
-		<%@include file="/WEB-INF/view/event_menu.jspf" %>
+		<%@include file="/WEB-INF/view/menu.jspf" %>
 		
 		<div>
 			<img src="<c:url value='/image?id=${eventDto.eventId}&timestamp=${System.currentTimeMillis()}' />" alt="Event Image" class="large-image" />

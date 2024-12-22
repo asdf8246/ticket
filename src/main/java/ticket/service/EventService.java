@@ -98,4 +98,24 @@ public class EventService {
 			eventDao.updateEventImage(Integer.parseInt(eventId), eventImage);
 		}
 	}
+	
+	// 搜尋
+	public List<EventDto> getSearchEvents(String search){
+		List<Events> events = eventDao.getSearchEvents(search);
+		List<EventDto> searchEventDtos = new ArrayList<>();
+		for (Events event : events) {
+			EventDto eventDto = new EventDto();
+			eventDto.setEventId(event.getEventId());
+			eventDto.setEventName(event.getEventName());
+			eventDto.setEventDate(event.getEventDate());
+			eventDto.setSellDate(event.getSellDate());
+			eventDto.setVenue(event.getVenue());
+			eventDto.setAddress(event.getAddress());
+			eventDto.setDescription(event.getDescription());
+			eventDto.setEventStatus(event.getEventStatus());
+			
+			searchEventDtos.add(eventDto);
+		}
+		return searchEventDtos;
+	}
 }

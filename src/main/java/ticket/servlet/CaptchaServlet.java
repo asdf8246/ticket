@@ -23,7 +23,7 @@ public class CaptchaServlet extends HttpServlet {
     private static final int HEIGHT = 50;
     
     // 設定字母和數字的集合
-    private static final String CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    private static final String CHAR_SET = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz1234567890";
     
     // 設定圖片中幾個隨機的干擾線
     private static final int LINE_COUNT = 5;
@@ -41,7 +41,13 @@ public class CaptchaServlet extends HttpServlet {
         // 設定背景顏色
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        
+         
+        // 設定圖形碼
+        String captchaCode = generateCaptchaCode();
+        g.setFont(new Font("Arial", Font.BOLD, 40));
+        g.setColor(Color.RED);
+        g.drawString(captchaCode, 20, 40);
+
         // 設定干擾線
         Random rand = new Random();
         g.setColor(Color.LIGHT_GRAY);
@@ -52,12 +58,6 @@ public class CaptchaServlet extends HttpServlet {
             int y2 = rand.nextInt(HEIGHT);
             g.drawLine(x1, y1, x2, y2);
         }
-        
-        // 設定圖形碼
-        String captchaCode = generateCaptchaCode();
-        g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.setColor(Color.RED);
-        g.drawString(captchaCode, 20, 40);
         
         // 儲存到 session 中，以便驗證
         request.getSession().setAttribute("captcha", captchaCode);

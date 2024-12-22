@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import ticket.model.dto.UserCert;
 import ticket.service.UserService;
 
 @WebServlet("/register")
@@ -15,6 +17,23 @@ public class RegisterServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		// 取得 session
+		HttpSession session = req.getSession();
+		Integer login = 0;
+		String userName = null;
+		String userRole = null;
+		// 判斷是否登入
+		if (session.getAttribute("userCert")!=null) {
+			login = 1;
+			UserCert userCert = (UserCert)session.getAttribute("userCert");
+			userName = userService.getUser(userCert.getUserId()).getUsername();
+			userRole = userCert.getRole();
+			req.setAttribute("userName", userName);
+			req.setAttribute("userRole", userRole);
+		}
+		req.setAttribute("login", login);		
+		
 		req.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(req, resp);
 		return;
 	}

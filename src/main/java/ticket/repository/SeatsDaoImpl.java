@@ -106,5 +106,22 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public Integer getSoldSeatsNums(Integer seatCategoryId) {
+		String sql = "SELECT COUNT(*) FROM seats WHERE seat_status = 'sold' and seat_category_id = ? ";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)){
+			pstmt.setInt(1, seatCategoryId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				if (rs.next()) {
+                    Integer soldSeats = rs.getInt(1);  // 获取查询结果的第一列（计数值）
+                    return soldSeats;
+                }
+			}
+		} catch (SQLException e) {
+            e.printStackTrace();
+		}
+		 return null;
+	}
 	
 }

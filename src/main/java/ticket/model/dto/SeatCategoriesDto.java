@@ -20,4 +20,7 @@ public class SeatCategoriesDto {
 	private String categoryName;
 	private Integer seatPrice;
 	private Integer numSeats;
+	
+	//售出座位量
+	private Integer soldSeats;
 }

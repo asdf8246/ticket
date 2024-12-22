@@ -60,3 +60,30 @@ function confirmDelete(orderId) {
     // 如果用戶選擇「取消」，則返回 false，阻止鏈接的默認行為（避免跳轉）
     return false;
 }
+
+
+// 確認是否刪除用戶
+function deleteUser(userId) {
+    // 顯示確認對話框
+    const confirmation = confirm("確定要註銷帳號嗎？註銷後用戶資料將全部刪除。");
+
+    if (confirmation) {
+        // 使用 AJAX 發送刪除請求
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", '/ticket/user/delete?userId=' + userId, true);
+        
+        // 當請求完成後的回調函數
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert("帳號已註銷");
+                window.location.href = '/ticket/home';
+            } else {
+                alert("帳號註銷失敗！");
+            }
+        };
+        xhr.send();  // 發送請求
+    }
+
+    // 如果用戶選擇「取消」，則返回 false，阻止鏈接的默認行為（避免跳轉）
+    return false;
+}

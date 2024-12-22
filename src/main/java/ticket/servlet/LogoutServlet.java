@@ -22,7 +22,7 @@ public class LogoutServlet extends HttpServlet {
 		
 		// 判斷是否登入
 		if (session.getAttribute("userCert")==null) {
-			resp.sendRedirect("/ticket/index.html"); // 重導回首頁
+			resp.sendRedirect("/ticket/home"); // 重導回首頁
 			return;
 		}
 		

@@ -10,7 +10,7 @@ import lombok.Data;
 	phonenumber varchar(255) not null unique comment '手機',
  	password_hash varchar(255) not null comment '使用者Hash密碼',
  	salt varchar(255) not null comment '隨機鹽',
- 	email varchar(255) comment '電子郵件',
+ 	email varchar(255) not null unique comment '電子郵件',
  	role varchar(255) not null default 'ROLE_USER' comment '角色權限'
 */
 @Data

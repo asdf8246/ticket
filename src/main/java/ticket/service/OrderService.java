@@ -122,4 +122,15 @@ public class OrderService {
 	public void updateOrderStatus(String orderId, String orderStatus) {
 		orderDao.updateOrderStatus(Integer.parseInt(orderId), orderStatus);
 	}
+	
+	public OrderDto checkUserOrderStatus(Integer userId,String eventId) {
+		Order order = orderDao.checkUserOrderStatus(userId, Integer.parseInt(eventId));
+		if (order==null) {
+			return null;
+		}
+		OrderDto orderDto = new OrderDto();
+		orderDto.setOrderId(order.getOrderId());
+		orderDto.setOrderStatus(order.getOrderStatus());
+		return orderDto;
+	}
 }

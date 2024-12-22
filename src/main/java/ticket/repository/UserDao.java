@@ -18,6 +18,8 @@ public interface UserDao {
 	
 	User getUser(Integer userId);
 	
+	User getUserByEmail(String account);
+	
 	// 新增
 	Object addUser(User user);
 	

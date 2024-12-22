@@ -34,6 +34,7 @@ public interface EventDao {
 	// 刪除
 	void deleteEvent(Integer eventId);
 	
-	
+	// 搜尋
+	List<Events> getSearchEvents(String search);
 	
 }

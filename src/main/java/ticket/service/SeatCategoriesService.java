@@ -7,9 +7,12 @@ import ticket.model.dto.SeatCategoriesDto;
 import ticket.model.entity.SeatCategories;
 import ticket.repository.SeatCategoriesDao;
 import ticket.repository.SeatCategoriesDaoImpl;
+import ticket.repository.SeatsDao;
+import ticket.repository.SeatsDaoImpl;
 
 public class SeatCategoriesService {
 	private SeatCategoriesDao seatCategoriesDao = new SeatCategoriesDaoImpl();
+	private SeatsDao seatsDao = new SeatsDaoImpl();
 	
 	//新增
 	public void appendSeatCategory(Integer eventId, String[] categoryNames, String[] seatPrices, String[] numSeatss) {
@@ -77,5 +80,26 @@ public class SeatCategoriesService {
 			seatCategories.add(seatCategory);
 		}
 		seatCategoriesDao.addSeatCategories(seatCategories);
+	}
+	
+	public List<SeatCategoriesDto> getSeatCategoriesChart(String eventId){
+		List<SeatCategoriesDto> seatCategoriesDtos = new ArrayList<>();
+		List<SeatCategories> seatCategories = seatCategoriesDao.getSeatCategories(Integer.parseInt(eventId));
+		
+		for(SeatCategories seatCategory : seatCategories) {
+			SeatCategoriesDto seatCategoriesDto = new SeatCategoriesDto();
+			Integer seatCategoryId =seatCategory.getSeatCategoryId();
+			Integer soldSeats = seatsDao.getSoldSeatsNums(seatCategoryId);
+			
+			seatCategoriesDto.setSeatCategoryId(seatCategoryId);
+			seatCategoriesDto.setEventId(seatCategory.getEventId());
+			seatCategoriesDto.setCategoryName(seatCategory.getCategoryName());
+			seatCategoriesDto.setSeatPrice(seatCategory.getSeatPrice());
+			seatCategoriesDto.setNumSeats(seatCategory.getNumSeats());
+			seatCategoriesDto.setSoldSeats(soldSeats);
+			
+			seatCategoriesDtos.add(seatCategoriesDto);
+		}
+		return seatCategoriesDtos;
 	}
 }

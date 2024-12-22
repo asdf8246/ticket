@@ -17,4 +17,5 @@ public interface SeatCategoriesDao {
 		
 	// 刪除
 	void deleteSeatCategories(Integer seatCategoryId);
+	
 }

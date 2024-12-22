@@ -20,6 +20,7 @@ import ticket.service.EventService;
 import ticket.service.OrderService;
 import ticket.service.SeatCategoriesService;
 import ticket.service.SeatsService;
+import ticket.service.UserService;
 import ticket.utils.CheckUser;
 
 @WebServlet(urlPatterns = {"/order/*"})
@@ -29,6 +30,7 @@ public class OrderServlet extends HttpServlet{
 	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
 	private SeatsService seatsService = new SeatsService();
 	private CheckUser checkUser = new CheckUser();
+	private UserService userService = new UserService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,8 +39,32 @@ public class OrderServlet extends HttpServlet{
 		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 		Integer userId = userCert.getUserId();
 		String userRole = userCert.getRole();
+		Integer login = 0;
+		String userName = null;
+		// 判斷是否登入
+		if (session.getAttribute("userCert")!=null) {
+			login = 1;
+			userName = userService.getUser(userCert.getUserId()).getUsername();
+			userRole = userCert.getRole();
+			req.setAttribute("userName", userName);
+			req.setAttribute("userRole", userRole);
+		}
+		req.setAttribute("login", login);
+		
 		if (pathInfo.equals("/buy")) {
 			String eventId = req.getParameter("eventId");
+			OrderDto orderDto = orderService.checkUserOrderStatus(userId, eventId);
+			if (orderDto != null) {
+				if (orderDto.getOrderStatus().equals("pending")) {
+					resp.setContentType("text/html;charset=UTF-8");
+		            resp.getWriter().write("<script type='text/javascript'>");
+		            resp.getWriter().write("alert('尚有未付款訂單!');");
+		            resp.getWriter().write("window.location.href = '/ticket/user/order';"); // 重新導向回表單頁面
+		            resp.getWriter().write("</script>");
+			        return;	
+				}
+			}
+			
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
 			EventDto eventDto = eventService.getEvent(eventId);
 			req.setAttribute("eventDto", eventDto);

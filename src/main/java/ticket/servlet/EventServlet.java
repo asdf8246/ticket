@@ -10,11 +10,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import ticket.model.dto.EventDto;
 import ticket.model.dto.SeatCategoriesDto;
+import ticket.model.dto.UserCert;
 import ticket.service.EventService;
 import ticket.service.SeatCategoriesService;
+import ticket.service.UserService;
+import ticket.utils.CheckUser;
 
 /**
  查詢所有: GET /events
@@ -33,21 +37,59 @@ import ticket.service.SeatCategoriesService;
 public class EventServlet extends HttpServlet {
 	private EventService eventService = new EventService();
 	private SeatCategoriesService seatCategoriesService = new SeatCategoriesService();
-	
+	private UserService userService = new UserService();
+	private CheckUser checkUser = new CheckUser();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
+		// 取得 session
+		HttpSession session = req.getSession();
+		Integer login = 0;
+		String userName = null;
+		String userRole = null;
+		UserCert userCert = (UserCert)session.getAttribute("userCert");
+		// 判斷是否登入
+		if (session.getAttribute("userCert")!=null) {
+			login = 1;
+			userName = userService.getUser(userCert.getUserId()).getUsername();
+			userRole = userCert.getRole();
+			req.setAttribute("userName", userName);
+			req.setAttribute("userRole", userRole);
+		}
+		req.setAttribute("login", login);
+		
 		if (pathInfo == null || pathInfo.equals("/*")) {
+			
+			if (!checkUser.checkUserRole(userCert.getUserId(), userRole)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			List<EventDto> eventDtos = eventService.findAllEvents();
 			req.setAttribute("eventDtos", eventDtos);
 			req.getRequestDispatcher("/WEB-INF/view/events.jsp").forward(req, resp);
 			return;
 		}
 		if (pathInfo.equals("/add")) {
+			
+			if (!checkUser.checkUserRole(userCert.getUserId(), userRole)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			req.getRequestDispatcher("/WEB-INF/view/event_add.jsp").forward(req, resp);
 			return;
 		}
 		if (pathInfo.equals("/get")) {
+			
+			if (!checkUser.checkUserRole(userCert.getUserId(), userRole)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			String eventId = req.getParameter("eventId");
 			EventDto eventDto = eventService.getEvent(eventId);
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
@@ -57,6 +99,13 @@ public class EventServlet extends HttpServlet {
 			return;
 		}
 		if (pathInfo.equals("/delete")) {
+			
+			if (!checkUser.checkUserRole(userCert.getUserId(), userRole)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			String eventId = req.getParameter("eventId");
 			eventService.deleteEvent(eventId);
 			resp.sendRedirect("/ticket/event");
@@ -69,6 +118,13 @@ public class EventServlet extends HttpServlet {
 			req.setAttribute("eventDto", eventDto);
 			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
 			req.getRequestDispatcher("/WEB-INF/view/event_view.jsp").forward(req, resp);
+			return;
+		}
+		if (pathInfo.equals("/chart")) {
+			String eventId = req.getParameter("eventId");
+			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategoriesChart(eventId);
+			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
+			req.getRequestDispatcher("/WEB-INF/view/event_chart.jsp").forward(req, resp);
 			return;
 		}
 	}
@@ -119,6 +175,7 @@ public class EventServlet extends HttpServlet {
 			resp.sendRedirect("/ticket/event");
 			return;
 		}
+		
 	}
 	
 	

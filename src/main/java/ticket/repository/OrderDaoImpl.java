@@ -191,6 +191,26 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 		}
 	}
 
+	@Override
+	public Order checkUserOrderStatus(Integer userId, Integer eventId) {
+		String sql = "select order_id, order_status from orders where user_id = ? and event_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, userId);
+			pstmt.setInt(2, eventId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				if (rs.next()) {
+					Order order = new Order();
+					order.setOrderId(rs.getInt("order_id"));
+					order.setOrderStatus(rs.getString("order_status"));
+					return order;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	
 	
 }
