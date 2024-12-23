@@ -110,7 +110,7 @@ public class OrderServlet extends HttpServlet{
 			String eventId = req.getParameter("eventId");
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "available";
-			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus, eventId);
 			orderService.deleteOrder(orderId);
 			
 			if (eventId == null) {
@@ -130,9 +130,12 @@ public class OrderServlet extends HttpServlet{
 				return;
 			}
 			
+			OrderDto orderDto = orderService.getOrder(orderId);
+			String eventId = orderDto.getEventId().toString();
+			
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "sold";
-			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus, eventId);
 			String orderStatus = "paid";
 			orderService.updateOrderStatus(orderId, orderStatus);
 			resp.sendRedirect("/ticket/user/order");
@@ -147,9 +150,12 @@ public class OrderServlet extends HttpServlet{
 				return;
 			}
 			
+			OrderDto orderDto = orderService.getOrder(orderId);
+			String eventId = orderDto.getEventId().toString();
+			
 			List<OrderDto> orderSeatsDto = orderService.getOrderSeats(orderId);
 			String seatStatus = "available";
-			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus);
+			seatsService.updateSeatsStatus(orderSeatsDto, seatStatus, eventId);
 			String orderStatus = "canceled";
 			orderService.updateOrderStatus(orderId, orderStatus);
 			resp.sendRedirect("/ticket/user/order");

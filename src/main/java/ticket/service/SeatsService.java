@@ -35,12 +35,12 @@ public class SeatsService {
 		return orderSeats;
 	}
 	
-	public void updateSeatsStatus(List<OrderDto> orderSeatsDto, String seatStatus) {
+	public void updateSeatsStatus(List<OrderDto> orderSeatsDto, String seatStatus , String eventId) {
 		List<Integer> seatIds = new ArrayList<Integer>();
 		for (OrderDto orderDto : orderSeatsDto) {
 			seatIds.add(orderDto.getSeatId());
 		}
-		seatsDao.updateSeatsStatus(seatIds, seatStatus);
+		seatsDao.updateSeatsStatus(seatIds, seatStatus , eventId);
 	}
 	
 }

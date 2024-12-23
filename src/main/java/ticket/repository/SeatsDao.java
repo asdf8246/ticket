@@ -10,7 +10,7 @@ public interface SeatsDao {
 	public List<Seats> buySeat(List<Seats> seats);
 	
 	//同時更新多筆座位的指定狀態
-	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus);
+	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus , String eventId);
 	
 	public Integer getSoldSeatsNums(Integer seatCategoryId);
 }

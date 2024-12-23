@@ -17,9 +17,10 @@ import lombok.Data;
 	關聯Table
   CREATE TABLE orders_seats (
   	order_id INT NOT NULL,
-  	seat_id INT PRIMARY KEY,
+  	seat_id INT NOT NULL,
   	category_name VARCHAR(255) NOT NULL,
   	seat_number INT NOT NULL,
+  	PRIMARY KEY (order_id, seat_id),  -- 設置複合主鍵
   	FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
   );
  */

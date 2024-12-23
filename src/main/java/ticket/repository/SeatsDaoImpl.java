@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ticket.model.entity.Seats;
+import ticket.socket.SeatDataSocket;
 
 public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 
@@ -88,7 +89,7 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 	}
 
 	@Override
-	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus) {
+	public void updateSeatsStatus(List<Integer> seatIds, String seatStatus , String eventId) {
 		String sql = "update seats set seat_status = ? where seat_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -102,6 +103,9 @@ public class SeatsDaoImpl extends BaseDao implements SeatsDao {
 			}
 			
 			pstmt.executeBatch();
+			
+			// 這裡進行 WebSocket 資料推送
+            SeatDataSocket.sendUpdatedData(eventId);  // 發送資料給所有連線的客戶端
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

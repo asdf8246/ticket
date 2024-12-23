@@ -18,6 +18,7 @@ import ticket.model.dto.UserCert;
 import ticket.service.EventService;
 import ticket.service.SeatCategoriesService;
 import ticket.service.UserService;
+import ticket.socket.SeatDataSocket;
 import ticket.utils.CheckUser;
 
 /**
@@ -124,6 +125,7 @@ public class EventServlet extends HttpServlet {
 			String eventId = req.getParameter("eventId");
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategoriesChart(eventId);
 			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
+			
 			req.getRequestDispatcher("/WEB-INF/view/event_chart.jsp").forward(req, resp);
 			return;
 		}
