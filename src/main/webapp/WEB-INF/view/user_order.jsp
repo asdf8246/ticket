@@ -29,6 +29,7 @@
 							<th>活動名稱</th><th>票券總價</th><th>建立日期</th><th>訂單狀態</th><th></th>
 						</tr>
 					</thead>
+					<tbody id="orderTableBody">
 					<c:forEach var="orderDtos" items="${ orderDtos }">
 						<tr>
 							<td>${ orderDtos.eventName }</td>
@@ -53,6 +54,7 @@
 							</td>
 						</tr>
 					</c:forEach>
+					</tbody>
 				</table>
 			</fieldset>
 		</div>

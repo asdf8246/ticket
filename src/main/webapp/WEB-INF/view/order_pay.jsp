@@ -57,12 +57,15 @@
 						</tr>
 					<input type="hidden" name="seatIds" value="${ orderSeatsDto.seatId }">
 					</c:forEach>
+						<tr>
+							<td colspan="2">票價合計: </td>
+							<td><f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" /></td>
+						</tr>
 					</tbody>
 				</table>
 			</fieldset>
 		</div>
 		<div class="pure-form" style="padding: 15px;">
-			票價合計: <f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" /><p />
 			<a href="/ticket/order/delete?orderId=${ orderDto.orderId }&eventId=${ orderDto.eventId }" onclick="return confirmDelete('${ orderDto.orderId }','${ orderDto.eventId }');" class="button-error pure-button">取消</a>
 			<a href="/ticket/order/finish?orderId=${ orderDto.orderId }" class="button-secondary pure-button">付款</a>
 		</div>
@@ -113,12 +116,12 @@
 	// 確認刪除操作的函數
 	function confirmDelete(orderId,eventId) {
 		// 顯示確認對話框
-		const confirmation = confirm("確定要取消訂單嗎？取消後將不會保留座位。");
+		const confirmation = confirm("確定要取消訂單嗎？取消後將不會保留。");
 
 		if (confirmation) {
 			// 使用 AJAX 發送刪除請求
 			var xhr = new XMLHttpRequest();
-			xhr.open("GET", '/ticket/order/delete?orderId=' + orderId, true);
+			xhr.open("GET", '/ticket/order/delete?orderId=' + orderId + '&eventId=' + eventId, true);
 			
 			// 當請求完成後的回調函數
 			xhr.onload = function() {

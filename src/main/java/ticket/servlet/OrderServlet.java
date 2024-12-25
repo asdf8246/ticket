@@ -54,6 +54,7 @@ public class OrderServlet extends HttpServlet{
 		if (pathInfo.equals("/buy")) {
 			String eventId = req.getParameter("eventId");
 			OrderDto orderDto = orderService.checkUserOrderStatus(userId, eventId);
+			
 			if (orderDto != null) {
 				if (orderDto.getOrderStatus().equals("pending")) {
 					resp.setContentType("text/html;charset=UTF-8");
@@ -63,8 +64,30 @@ public class OrderServlet extends HttpServlet{
 		            resp.getWriter().write("</script>");
 			        return;	
 				}
+				
+				if (orderDto.getOrderStatus().equals("paid")) {
+					resp.setContentType("text/html;charset=UTF-8");
+		            resp.getWriter().write("<script type='text/javascript'>");
+		            resp.getWriter().write("alert('已完成票券購買!');");
+		            resp.getWriter().write("window.location.href = '/ticket/user/order';"); // 重新導向回表單頁面
+		            resp.getWriter().write("</script>");
+			        return;	
+				}
 			}
 			
+			String sellDate = eventService.getEvent(eventId).getSellDate();
+			// 定義時間格式
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        // 將資料庫時間字符串轉換為 LocalDateTime
+	        LocalDateTime sellDateTime = LocalDateTime.parse(sellDate, formatter);
+	        // 獲取當前時間
+	        LocalDateTime currentDateTime = LocalDateTime.now();
+	        if (sellDateTime.isAfter(currentDateTime)) {
+	        	req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+	        
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
 			EventDto eventDto = eventService.getEvent(eventId);
 			req.setAttribute("eventDto", eventDto);
@@ -180,14 +203,10 @@ public class OrderServlet extends HttpServlet{
 		String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
 		
 		if (pathInfo.equals("/buy")) {
-			// 獲取伺服器當前時間
-	        String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
-			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
+			       
 			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
 			
 			if (seats.isEmpty()) {
-				orderService.deleteOrder(orderId.toString());
-				
 				// 如果處理失敗，顯示錯誤訊息
 	            resp.setContentType("text/html;charset=UTF-8");
 	            resp.getWriter().write("<script type='text/javascript'>");
@@ -196,6 +215,10 @@ public class OrderServlet extends HttpServlet{
 	            resp.getWriter().write("</script>");
 		        return;
 			}
+			
+			// 獲取伺服器當前時間
+			String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
+			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
 			
 			orderService.addOrderSeats(orderId, seats);
 			resp.sendRedirect("/ticket/order/pay?orderId=" + orderId);

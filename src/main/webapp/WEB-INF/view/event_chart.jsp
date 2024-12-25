@@ -6,12 +6,59 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
+		<link rel="stylesheet" href="/ticket/css/buttons.css">
+		<link rel="stylesheet" href="/ticket/css/layout.css">
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		
+		<style>
+			#eventChart {
+				width: 1400px;
+				max-width: 90%;
+				height: auto;
+				background-color: white;
+			}
+		</style>
 	</head>
 	<body>
-	  <h2>座位銷售狀況</h2>
-    <canvas id="seatChart" width="400" height="200"></canvas>
-
+	<!-- menu bar include -->
+	<%@include file="/WEB-INF/view/menu.jspf" %>
+		
+	<div id="eventChart">
+	    <h2>${ eventDto.eventName }</h2>
+    	<canvas id="seatChart" width="400" height="200"></canvas>
+	</div>
+	
+	<div class="pure-form" style="max-width: 90%;">
+		<fieldset id="seatDetails">
+        <legend>座位銷售詳情</legend>
+        <table class="pure-table pure-table-bordered">
+            <thead>
+                <tr>
+                    <th>座位類別</th>
+                    <th>總座位數</th>
+                    <th>已銷售座位數</th>
+                    <th>剩餘座位數</th>
+                </tr>
+            </thead>
+            <tbody id="seatDetailsBody">
+                <!-- 這裡的內容會在 WebSocket 更新時動態插入 -->
+                <c:forEach var="seatCategory" items="${seatCategoriesDto}">
+                    <tr>
+                        <td>${seatCategory.categoryName}</td>
+                        <td>${seatCategory.numSeats}</td>
+                        <td>${seatCategory.soldSeats}</td>
+                        <td>${seatCategory.numSeats - seatCategory.soldSeats}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </fieldset>
+	</div>
+	
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
  		// 創建 WebSocket 連接
     	var socket = new WebSocket("ws://localhost:8080/ticket/seatDataSocket");
@@ -89,6 +136,34 @@
 
             // 重新渲染圖表
             seatChart.update();
+            
+         	// 更新 fieldset 中的座位詳情表格
+            var seatDetailsBody = document.getElementById('seatDetailsBody');
+            seatDetailsBody.innerHTML = '';  // 清空表格內容
+            
+            // 重新填充表格
+            for (var i = 0; i < categories.length; i++) {
+                var row = document.createElement('tr');
+
+                // 使用 textContent 來插入純文本
+                var categoryCell = document.createElement('td');
+                categoryCell.textContent = categories[i];
+                row.appendChild(categoryCell);
+
+                var numSeatsCell = document.createElement('td');
+                numSeatsCell.textContent = numSeatsData[i];
+                row.appendChild(numSeatsCell);
+
+                var soldSeatsCell = document.createElement('td');
+                soldSeatsCell.textContent = soldSeatsData[i];
+                row.appendChild(soldSeatsCell);
+
+                var remainingSeatsCell = document.createElement('td');
+                remainingSeatsCell.textContent = remainingSeatsData[i];
+                row.appendChild(remainingSeatsCell);
+
+                seatDetailsBody.appendChild(row);
+            }
         };
 
         // 當 WebSocket 連線關閉時執行

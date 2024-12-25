@@ -119,3 +119,19 @@ td, th {
     width: 356.44px;
 	height: 225px;
 }
+
+.numbered-text {
+    counter-reset: paragraph; /* 初始化計數器 */
+}
+
+.numbered-text p {
+    counter-increment: paragraph; /* 每次 p 元素出現時計數器遞增 */
+    position: relative;
+    padding-left: 20px;
+}
+
+.numbered-text p::before {
+    content: counter(paragraph) ". "; /* 在每段前面顯示編號 */
+    position: absolute;
+    left: 0;
+}

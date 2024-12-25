@@ -67,6 +67,21 @@
 	      // 獲取所有 input 元素
 	      const inputs = document.querySelectorAll('input[type="number"]');
 	      
+	   	  // 計算所有 input 的合計
+	      let total = 0;
+	      inputs.forEach(input => {
+	        const value = parseFloat(input.value);  // 轉換為數字
+	        if (!isNaN(value)) {  // 確保數字是有效的
+	          total += value;
+	        }
+	      });
+
+	      // 如果合計大於 4，顯示提示訊息並阻止表單提交
+	      if (total > 4) {
+	        alert('最多選取 4 張票券！');
+	        event.preventDefault();  // 阻止表單提交
+	      }
+	      
 	      // 檢查是否所有 input 的值都為 0
 	      let allZero = true;
 	      inputs.forEach(input => {

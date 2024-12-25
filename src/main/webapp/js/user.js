@@ -38,7 +38,7 @@ function confirmCancel(orderId, orderDate) {
 // 確認刪除操作的函數
 function confirmDelete(orderId) {
     // 顯示確認對話框
-    const confirmation = confirm("確定要取消訂單嗎？取消後將不會保留座位。");
+    const confirmation = confirm("確定要取消訂單嗎？取消後將不會保留。");
 
     if (confirmation) {
         // 使用 AJAX 發送刪除請求

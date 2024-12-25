@@ -16,7 +16,7 @@ public class EventDaoImpl extends BaseDao implements EventDao {
 	@Override
 	public List<Events> findAllEvents() {
 		List<Events> events = new ArrayList<>();
-		String sql = "select * from events";
+		String sql = "select * from events ORDER BY sell_date";
 		try(Connection connection = DatabaseConnectionPool.getConnection() ) {
 			try (Statement stmt = connection.createStatement();
 					ResultSet rs = stmt.executeQuery(sql)) {

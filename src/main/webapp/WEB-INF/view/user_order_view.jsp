@@ -49,10 +49,13 @@
 						<td><f:formatNumber value="${ orderSeatsDto.seatPrice }" type="currency" maxFractionDigits="0" /></td>
 					</tr>
 				</c:forEach>
+					<tr>
+						<td colspan="2">票價合計: </td>
+						<td><f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" /></td>
+					</tr>
 				</tbody>
 			</table>
 		</fieldset>
-		票價合計: <f:formatNumber value="${ orderDto.orderPrice }" type="currency" maxFractionDigits="0" />
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>

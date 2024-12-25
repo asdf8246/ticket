@@ -63,7 +63,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 	@Override
 	public List<Order> getUserOrders(Integer userId){
 		List<Order> userOrders = new ArrayList<Order>();
-		String sql = "select * from orders where user_id = ?";
+		String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, userId);
 			try(ResultSet rs = pstmt.executeQuery()){
@@ -193,7 +193,7 @@ public class OrderDaoImpl extends BaseDao implements OrderDao {
 
 	@Override
 	public Order checkUserOrderStatus(Integer userId, Integer eventId) {
-		String sql = "select order_id, order_status from orders where user_id = ? and event_id = ?";
+		String sql = "select order_id, order_status from orders where user_id = ? and event_id = ? and order_status != 'canceled'";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, userId);
 			pstmt.setInt(2, eventId);

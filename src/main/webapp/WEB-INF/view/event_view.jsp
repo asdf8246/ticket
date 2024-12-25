@@ -29,15 +29,27 @@
 		<div>
 			<img src="<c:url value='/image?id=${eventDto.eventId}&timestamp=${System.currentTimeMillis()}' />" alt="Event Image" class="large-image" />
 		</div>
-		<div class="pure-form" style="padding: 15px;">
+		<div class="pure-form" style="padding: 15px; position: relative;">
 			<h2>${ eventDto.eventName }</h2>
-			開賣時間: ${ eventDto.sellDate } / 剩餘: <span id="countdown"></span><p />
-			活動日期: ${ eventDto.eventDate }<p />
-			活動地點: ${ eventDto.venue } / ${ eventDto.address }<p />
+			<p>開賣時間: ${ eventDto.sellDate } / 剩餘: <span id="countdown"></span></p>
+			<p>活動日期: ${ eventDto.eventDate }</p>
+			<p>活動地點: ${ eventDto.venue } / ${ eventDto.address }</p>
+			
+			<!-- 右上角按鈕 -->
+    		<a href="/ticket/event/chart?eventId=${ eventDto.eventId }" class="btn btn-warning btn-sm text-black-70" style="position: absolute; top: 10px; right: 10px;">銷售情形</a>
 		</div>
 		<div class="pure-form" style="padding: 15px;">
 			<h3>活動介紹</h3>
 			${ eventDto.description }
+		</div>
+		<div class="pure-form text-wrap numbered-text" style="padding: 15px;text-align: start;">
+			<h3 class="text-center">注意事項</h3>
+			<p>僅接受已完成手機號碼及電子郵件地址驗證之會員購買，購票前請先"加入會員"並需完成"電子郵件地址及手機"驗證，以便進行購票流程。</p>
+			<p>為了確保您的權益，強烈建議您，在註冊會員或是結帳時填寫的聯絡人電子郵件，盡量不要使用Yahoo或Hotmail郵件信箱，以免因為擋信、漏信，甚至被視為垃圾郵件而無法收到『訂單成立通知信』。</p>
+			<p>每場活動僅能成立 1 筆訂單，每筆最多購買 4 張，每一票種最多購買 2 張。</p>
+			<p>請勿於拍賣網站或是其他未授權售票之通路、網站購票，除可能衍生詐騙案件或交易糾紛外，以免影響自身權益，若發生演出現場無法入場或是其他問題，概不負責。</p>
+			<p>若有任何形式非供自用而加價轉售（無論加價名目為代購費、交通費、補貼等均包含在內）之情事經查屬實者，可依社會秩序維護法第64條第2款逕向警方檢舉。</p>
+			<p>購票前請詳閱注意事項，一旦購票成功視為同意上述所有活動注意事項。</p>
 		</div>
 		<div class="pure-form" style="padding: 15px;">
 			<h3>活動票券</h3>
@@ -71,6 +83,7 @@
 		
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 		<script>
+			
 			// 从后端获取的时间字符串
 			const sellDate = "${ eventDto.sellDate }"  // 示例数据（可以替换成从数据库获得的时间）
 			// 使用 date-fns 解析日期字符串，并转换为 JavaScript Date 对象

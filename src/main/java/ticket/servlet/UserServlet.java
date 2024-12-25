@@ -120,6 +120,7 @@ public class UserServlet extends HttpServlet {
 			return;
 		} else if (pathInfo.equals("/order")) {
 			List<OrderDto> orderDtos = orderService.getUserOrders(certUserId);
+			
 			req.setAttribute("orderDtos", orderDtos);
 			req.getRequestDispatcher("/WEB-INF/view/user_order.jsp").forward(req, resp);
 			return;

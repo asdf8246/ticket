@@ -123,9 +123,10 @@ public class EventServlet extends HttpServlet {
 		}
 		if (pathInfo.equals("/chart")) {
 			String eventId = req.getParameter("eventId");
+			EventDto eventDto = eventService.getEvent(eventId);
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategoriesChart(eventId);
 			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
-			
+			req.setAttribute("eventDto", eventDto);
 			req.getRequestDispatcher("/WEB-INF/view/event_chart.jsp").forward(req, resp);
 			return;
 		}
