@@ -21,14 +21,12 @@ import ticket.service.SeatCategoriesService;
 @ServerEndpoint("/seatDataSocket")
 public class SeatDataSocket {
 	
-    // 用於儲存所有的 WebSocket 會話
-    private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
-
-    // 當 WebSocket 連線建立時觸發
+	// 當 WebSocket 連線建立時觸發
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session); // 將新連線加入會話集合
-        System.out.println("WebSocket connected: " + session.getId());
+        String sessionId = session.getId(); // 假設您使用 session.getId() 作為唯一識別
+        WebSocketManager.addSession(null, sessionId, session, "seatData"); // 添加座位數據會話
+        System.out.println("WebSocket connected for seat data: " + sessionId);
     }
 
     // 當收到前端訊息時觸發
@@ -40,8 +38,9 @@ public class SeatDataSocket {
     // 當 WebSocket 連線關閉時觸發
     @OnClose
     public void onClose(Session session) {
-        sessions.remove(session); // 將關閉的會話從集合中移除
-        System.out.println("WebSocket disconnected: " + session.getId());
+        String userId = session.getId();
+        WebSocketManager.removeSession(userId, "seatData"); // 移除座位數據會話
+        System.out.println("WebSocket disconnected for seat data: " + userId);
     }
 
     // 當 WebSocket 出現錯誤時觸發
@@ -78,16 +77,9 @@ public class SeatDataSocket {
                 .add("numSeats", numSeatsBuilder.build())
                 .add("soldSeats", soldSeatsBuilder.build())
                 .build();
-
+        
         // 向所有連線的客戶端發送資料
-        synchronized (sessions) {
-            for (Session session : sessions) {
-                try {
-                    session.getBasicRemote().sendText(data.toString());  // 發送 JSON 資料給前端
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        WebSocketManager.sendMessageToAll(data.toString(), "seatData"); // 使用 WebSocketManager 發送座位數據
     }
+
 }

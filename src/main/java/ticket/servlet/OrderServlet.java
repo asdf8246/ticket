@@ -1,18 +1,29 @@
 package ticket.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 import ticket.model.dto.EventDto;
 import ticket.model.dto.OrderDto;
+import ticket.model.dto.OrderMessage;
 import ticket.model.dto.SeatCategoriesDto;
 import ticket.model.dto.UserCert;
 import ticket.model.entity.Seats;
@@ -23,6 +34,8 @@ import ticket.service.SeatsService;
 import ticket.service.UserService;
 import ticket.utils.CheckUser;
 
+
+@MultipartConfig
 @WebServlet(urlPatterns = {"/order/*"})
 public class OrderServlet extends HttpServlet{
 	private OrderService orderService = new OrderService();
@@ -31,6 +44,8 @@ public class OrderServlet extends HttpServlet{
 	private SeatsService seatsService = new SeatsService();
 	private CheckUser checkUser = new CheckUser();
 	private UserService userService = new UserService();
+	
+	private static final String QUEUE_NAME = "order_queue"; // RabbitMQ 隊列名稱
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -90,6 +105,9 @@ public class OrderServlet extends HttpServlet{
 	        
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategories(eventId);
 			EventDto eventDto = eventService.getEvent(eventId);
+			
+			
+			req.setAttribute("userId", userId.toString());
 			req.setAttribute("eventDto", eventDto);
 			req.setAttribute("seatCategoriesDto", seatCategoriesDto);
 			req.getRequestDispatcher("/WEB-INF/view/order_buy.jsp").forward(req, resp);
@@ -190,40 +208,78 @@ public class OrderServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String pathInfo = req.getPathInfo();
-        
+        	
 		HttpSession session = req.getSession();
 		UserCert userCert = (UserCert)session.getAttribute("userCert"); // 取得 session 登入憑證
 		Integer userId = userCert.getUserId();
 		
-        String eventId = req.getParameter("eventId");
-		String eventName = req.getParameter("eventName");
-		
-		String[] numSeatss = req.getParameterValues("numSeatss");
-		String[] seatPrices = req.getParameterValues("seatPrices");
-		String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
-		
 		if (pathInfo.equals("/buy")) {
 			       
-			List<Seats> seats = seatsService.buySeats(eventId, seatCategoryIds, numSeatss);
+			 // 處理表單中的所有部分
+	        Collection<Part> parts = req.getParts();
+	        
+	        // 遍歷所有的表單部分
+	        for (Part part : parts) {
+	            String fieldName = part.getName();
+	            String submittedFileName = part.getSubmittedFileName();  // 獲取文件名
+
+	            // 確保是表單中的文件欄位
+	            if (submittedFileName != null && !submittedFileName.isEmpty()) {
+	                // 處理文件上傳的部分
+	                System.out.println("處理文件: " + submittedFileName);
+	                // 這裡可以使用 part.getInputStream() 來讀取文件內容
+	            } else {
+	                // 處理普通的表單字段
+	                String fieldValue = req.getParameter(fieldName);
+	                System.out.println("Field: " + fieldName + " = " + fieldValue);
+	            }
+	        }
+
+	        // 例如，您可以從表單中獲取 seatCategoryIds 和 seatPrices
+	        String[] seatCategoryIds = req.getParameterValues("seatCategoryIds");
+	        String[] seatPrices = req.getParameterValues("seatPrices");
+	        String[] numSeatss = req.getParameterValues("numSeatss");
+	        String eventId = req.getParameter("eventId");
+	        String eventName = req.getParameter("eventName");
 			
-			if (seats.isEmpty()) {
-				// 如果處理失敗，顯示錯誤訊息
-	            resp.setContentType("text/html;charset=UTF-8");
-	            resp.getWriter().write("<script type='text/javascript'>");
-	            resp.getWriter().write("alert('票券已完售!');");
-	            resp.getWriter().write("window.location.href = '/ticket/event/view?eventId=" + eventId + "';"); // 重新導向回表單頁面
-	            resp.getWriter().write("</script>");
-		        return;
-			}
 			
-			// 獲取伺服器當前時間
-			String orderDate = LocalDateTime.now().format(dtf); // 例如：2024-12-02T15:30:00
-			Integer orderId = orderService.addOrder(userId, eventId, eventName, seatPrices, numSeatss, orderDate);
+			OrderMessage orderMessage = new OrderMessage(userId.toString(), eventId, eventName, seatPrices, numSeatss, seatCategoryIds);
 			
-			orderService.addOrderSeats(orderId, seats);
-			resp.sendRedirect("/ticket/order/pay?orderId=" + orderId);
+			// 發送消息到 RabbitMQ
+	        sendOrderToQueue(orderMessage);
+			
+	        // 设置响应内容类型为 JSON
+	        resp.setContentType("application/json");
+	        resp.setCharacterEncoding("UTF-8");
+
+	        // 创建 PrintWriter 对象输出 JSON 数据
+	        PrintWriter out = resp.getWriter();
+	        out.println("{\"status\": \"success\", \"message\": \"訂單已成功提交，處理中...\"}");
+	        out.flush();
+	        
 			return;
 		}
 	}
 	
+	private void sendOrderToQueue(OrderMessage orderMessage) {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost"); // 設置 RabbitMQ 服務器的地址
+        try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
+
+            // 宣告隊列
+            channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+
+            // 序列化訂單消息為 JSON 格式
+            String orderMessageJson = new Gson().toJson(orderMessage);
+
+            // 發送消息到隊列
+            channel.basicPublish("", QUEUE_NAME, 
+                                 new AMQP.BasicProperties.Builder().deliveryMode(2).build(), 
+                                 orderMessageJson.getBytes());
+
+            System.out.println("訂單消息已發送到 RabbitMQ: " + orderMessageJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

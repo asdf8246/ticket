@@ -122,6 +122,13 @@ public class EventServlet extends HttpServlet {
 			return;
 		}
 		if (pathInfo.equals("/chart")) {
+			
+			if (!checkUser.checkUserRole(userCert.getUserId(), userRole)) {
+				req.setAttribute("message", "執行錯誤操作!!!");
+				req.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(req, resp);
+				return;
+			}
+			
 			String eventId = req.getParameter("eventId");
 			EventDto eventDto = eventService.getEvent(eventId);
 			List<SeatCategoriesDto> seatCategoriesDto = seatCategoriesService.getSeatCategoriesChart(eventId);

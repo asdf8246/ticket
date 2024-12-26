@@ -40,6 +40,8 @@ public class DatabaseConnectionPool {
         config.setReadOnly(readOnly);
         config.setIdleTimeout(idleTimeout);
         config.setMaxLifetime(maxLifetime);
+        
+        config.setHealthCheckRegistry(null);
         // 初始化連線池
         dataSource = new HikariDataSource(config);
     	} catch (ClassNotFoundException e) {
