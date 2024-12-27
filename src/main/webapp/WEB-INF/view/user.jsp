@@ -18,7 +18,7 @@
 		<!-- menu bar include -->
 		<%@include file="/WEB-INF/view/menu.jspf" %>
 		
-		<div style="padding: 15px">
+		<div>
 			<form class="pure-form" method="post" action="/ticket/user/add">
 				<fieldset>
 					<legend>User 新增</legend>
