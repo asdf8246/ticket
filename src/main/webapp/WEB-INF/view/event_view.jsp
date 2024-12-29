@@ -35,8 +35,10 @@
 			<p>活動日期: ${ eventDto.eventDate }</p>
 			<p>活動地點: ${ eventDto.venue } / ${ eventDto.address }</p>
 			
-			<!-- 右上角按鈕 -->
-    		<a href="/ticket/event/chart?eventId=${ eventDto.eventId }" class="btn btn-warning btn-sm text-black-70" style="position: absolute; top: 10px; right: 10px;">銷售情形</a>
+			<c:if test="${ userRole == 'ROLE_ADMIN' }">
+				<!-- 右上角按鈕 -->
+	    		<a href="/ticket/event/chart?eventId=${ eventDto.eventId }" class="btn btn-warning btn-sm text-black-70" style="position: absolute; top: 10px; right: 10px;">銷售情形</a>
+			</c:if>
 		</div>
 		<div class="pure-form" style="padding: 15px;">
 			<h3>活動介紹</h3>

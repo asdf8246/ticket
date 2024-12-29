@@ -53,6 +53,7 @@ td, th {
 
 /*主頁卡片*/
 .row{
+	max-width: 1600px;
     flex-direction: row;
     justify-content: center;
 }

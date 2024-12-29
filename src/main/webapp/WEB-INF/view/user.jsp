@@ -52,7 +52,7 @@
 								<td>${ userDto.userEmail }</td>
 								<td>${ userDto.userRole }</td>
 								<td><a href="/ticket/user/get?userPhonenumber=${ userDto.userPhonenumber }" class="button-secondary pure-button">修改</a></td>
-								<td><a href="/ticket/user/delete?userId=${ userDto.userId }" class="button-error pure-button">刪除</a></td>
+								<td><a href="/ticket/user/delete?userId=${ userDto.userId }" class="button-error pure-button">封鎖</a></td>
 							</tr>
 						</c:forEach>
 					</table>

@@ -39,7 +39,7 @@
 							<td>${ eventDto.description }</td>
 							<td>${ eventDto.eventStatus }</td>
 							<td><a href="/ticket/event/get?eventId=${ eventDto.eventId }" class="button-secondary pure-button">修改</a><br>
-							<a href="/ticket/event/delete?eventId=${ eventDto.eventId }" class="button-error pure-button">刪除</a><br>
+							<a href="/ticket/event/delete?eventId=${ eventDto.eventId }" class="button-error pure-button">下架</a><br>
 							<a href="/ticket/event/view?eventId=${ eventDto.eventId }" class="button-success pure-button">檢視</a></td>
 						</tr>
 					</c:forEach>
