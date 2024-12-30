@@ -1,6 +1,8 @@
 package ticket.service;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import ticket.repository.EventDaoImpl;
 
 public class EventService {
 	private EventDao eventDao = new EventDaoImpl();
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	
 	// 所有
 	public List<EventDto> findAllEvents() {
@@ -44,6 +47,21 @@ public class EventService {
 		event.setAddress(address);
 		event.setDescription(description);
 		event.setEventImage(eventImage);
+		
+        // 當前的時間
+        String now = LocalDateTime.now().format(dtf);
+        
+        LocalDateTime nowTime = LocalDateTime.parse(now, dtf);
+        LocalDateTime sellDateTime = LocalDateTime.parse(sellDate, dtf);
+
+        
+        if (sellDateTime.isAfter(nowTime)) {
+			event.setEventStatus("準備中");
+		} else {
+			event.setEventStatus("開賣中");
+		}
+        
+        
 		Integer eventId  = eventDao.addEvent(event);
 		return eventId;
 	}

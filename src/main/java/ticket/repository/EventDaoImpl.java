@@ -73,7 +73,7 @@ public class EventDaoImpl implements EventDao {
 
 	@Override
 	public Integer addEvent(Events event) {
-		String sql = "insert into events(event_name, event_date, sell_date, venue, address, description , event_image) value(?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into events(event_name, event_date, sell_date, venue, address, description , event_image, event_status) value(?, ?, ?, ?, ?, ?, ? ,?)";
 		try(Connection conn = DatabaseConnectionPool.getConnection()){
 			try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				pstmt.setString(1, event.getEventName());
@@ -83,6 +83,7 @@ public class EventDaoImpl implements EventDao {
 				pstmt.setString(5, event.getAddress());
 				pstmt.setString(6, event.getDescription());
 				pstmt.setBlob(7, event.getEventImage());
+				pstmt.setString(8, event.getEventStatus());
 				
 				int rowcount = pstmt.executeUpdate();
 				if (rowcount != 1) {

@@ -161,7 +161,7 @@ public class EventServlet extends HttpServlet {
 		if (pathInfo.equals("/add")) {
 			// 獲取檔案
 	        Part filePart = req.getPart("file");
-	        if (filePart == null) {
+	        if (!(filePart.getSize() > 0)) {
 	        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "檔案上傳失敗，未選擇檔案！");
 	        	return;
 	        }
@@ -176,7 +176,7 @@ public class EventServlet extends HttpServlet {
 			
 			Part filePart = req.getPart("file");
 			InputStream eventImage = null;
-	        if (filePart != null) {
+	        if (filePart != null && filePart.getSize() > 0) {
 	        	eventImage = filePart.getInputStream();
 	        }
 			
