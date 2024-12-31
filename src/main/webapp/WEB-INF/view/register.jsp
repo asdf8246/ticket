@@ -21,7 +21,7 @@
 				<legend>註冊</legend>
 				<p>姓名: <input type="text" name="username" placeholder="請輸入姓名" required /></p>
 				<p>手機: <input type="tel" name="phonenumber" pattern="09\d{8}" placeholder="例如：0912345678" required></p>
-				<p>密碼: <input type="text" name="password" placeholder="請輸入 password" required /></p>
+				<p>密碼: <input type="password" name="password" placeholder="請輸入 password" required /></p>
 				<p>電郵: <input type="email" name="email" placeholder="請輸入 email" required /></p>
 				<div class="buttons-container">
 					<button type="reset" class="pure-button">重置</button>
